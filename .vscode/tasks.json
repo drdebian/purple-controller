@@ -1,0 +1,49 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // Kedro tasks
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Kedro Install",
+            "type": "shell",
+            "command": "C:/Users/alber/Dropbox/study/fhv/nes20/ma/code/purple-controller/venv/Scripts/kedro",
+            "args": [
+                "install"
+            ]
+        },
+        {
+            "label": "Kedro Test",
+            "group": "test",
+            "type": "shell",
+            "command": "C:/Users/alber/Dropbox/study/fhv/nes20/ma/code/purple-controller/venv/Scripts/kedro",
+            "args": [
+                "test"
+            ]
+        },
+        {
+            "label": "Kedro Run",
+            "type": "shell",
+            "command": "C:/Users/alber/Dropbox/study/fhv/nes20/ma/code/purple-controller/venv/Scripts/kedro",
+            "args": [
+                "run"
+            ]
+        },
+        // This is the default build task
+        {
+            "label": "Kedro Package",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "type": "shell",
+            "command": "C:/Users/alber/Dropbox/study/fhv/nes20/ma/code/purple-controller/venv/Scripts/kedro",
+            "args": [
+                "package"
+            ],
+            // Will run `Test` before packaging
+            "dependsOn": [
+                "Test"
+            ]
+        }
+    ]
+}

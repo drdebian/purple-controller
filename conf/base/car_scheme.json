@@ -1,0 +1,63 @@
+{
+    "cars": [
+        {
+            "carID": 1,
+            "model": "Zoe",
+            "capacity": 52,
+            "minChargingPower": 6,
+            "maxChargingPower": 22,
+            "wallboxSerial": null,
+            "dongleToken": null
+        },
+
+        {
+            "carID": 2,
+            "model": "Zoe",
+            "capacity": 52,
+            "minChargingPower": 6,
+            "maxChargingPower": 22,
+            "wallboxSerial": null,
+            "dongleToken": null
+        },
+
+        {
+            "carID": 3,
+            "model": "Zoe",
+            "capacity": 52,
+            "minChargingPower": 6,
+            "maxChargingPower": 22,
+            "wallboxSerial": null,
+            "dongleToken": null
+        },
+
+        {
+            "carID": 4,
+            "model": "Zoe",
+            "capacity": 52,
+            "minChargingPower": 6,
+            "maxChargingPower": 22,
+            "wallboxSerial": null,
+            "dongleToken": null
+        },
+
+        {
+            "carID": 5,
+            "model": null,
+            "capacity": null,
+            "minChargingPower": null,
+            "maxChargingPower": 1,
+            "wallboxSerial": null,
+            "dongleToken": null
+        },
+
+        {
+            "carID": 6,
+            "model": null,
+            "capacity": null,
+            "minChargingPower": null,
+            "maxChargingPower": 1,
+            "wallboxSerial": null,
+            "dongleToken": null
+        }
+    ]
+}

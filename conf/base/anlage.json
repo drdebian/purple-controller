@@ -1,0 +1,45 @@
+{
+    "LiLa": {
+        "pv": {
+            "maxPower":14.28
+        },  
+        "battery" : {
+            "capacity":26.56,
+            "maxChargingPower":12.78,
+            "maxDischargePower":12.78,
+            "minChargingPower":null
+        },
+        "chargingstations": [
+            {
+                "stationId":1,
+                "serialNumber":null,
+                "maxChargingPower":22
+            },
+            {
+                "stationId":2,
+                "serialNumber":null,
+                "maxChargingPower":22
+            },
+            {
+                "stationId":3,
+                "serialNumber":null,
+                "maxChargingPower":22
+            },
+            {
+                "stationId":4,
+                "serialNumber":null,
+                "maxChargingPower":22
+            },
+            {
+                "stationId":5,
+                "serialNumber":null,
+                "maxChargingPower":22
+            },
+            {
+                "stationId":6,
+                "serialNumber":null,
+                "maxChargingPower":22
+            }
+        ]                          
+    }
+}

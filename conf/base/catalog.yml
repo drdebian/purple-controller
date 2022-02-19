@@ -1,0 +1,126 @@
+# Here you can define all your data sets by using simple YAML syntax.
+#
+# Documentation for this file format can be found in "The Data Catalog"
+# Link: https://kedro.readthedocs.io/en/stable/05_data/01_data_catalog.html
+
+# purple_lila:
+#   type: purple_controller.extras.datasets.partitioned_prefixed_data_set.IncrementalDataSet
+#   dataset: pandas.CSVDataSet
+#   path: sftp:///home/au/data/lila/raw/
+#   filename_suffix: .csv
+#   filename_prefix: LiLa
+#   credentials: my_fhvdirac_credentials
+
+# purple_auto1:
+#   type: purple_controller.extras.datasets.partitioned_prefixed_data_set.IncrementalDataSet
+#   dataset: pandas.CSVDataSet
+#   path: sftp:///home/au/data/lila/raw/
+#   filename_suffix: .csv
+#   filename_prefix: auto1
+#   credentials: my_fhvdirac_credentials
+
+raw_lila:
+  type: purple_controller.extras.datasets.partitioned_prefixed_data_set.IncrementalDataSet
+  dataset:
+    type: pandas.CSVDataSet
+    load_args:
+      delimiter: ";"
+      #names: ["TimeDate","PV-W","Kreisel Arbeitsmodus","Kreisel-Ladeleistung","Kreisel-Entladeleistung","Kreisel-SOC","Keba-X1-Ladeleistung","Keba-X1-Phase1-Watt","Keba-X1-Phase2-Watt","Keba-X1-Phase3-Watt","Keba-C1-Ladeleistung","Keba-C1-Phase1-Watt","Keba-C1-Phase2-Watt","Keba-C1-Phase3-Watt"]
+      #header: 0
+      na_values: ["undefined", "null"]
+      keep_default_na: True
+  filename_suffix: .csv
+  filename_prefix: LiLa
+  path: sftp:///home/au/data/lila/raw/
+  credentials: my_fhvdirac_credentials
+
+#  path: data/01_raw/
+
+
+table_lila:
+  type: pandas.SQLTableDataSet
+  credentials: my_sqlite_creds
+  table_name: lila
+  save_args:
+    if_exists: append
+
+
+####rsync -azv --rsh=ssh au@dirac.hostingcenter.uclv.net::lila/*.csv /cygdrive/c/Users/Albert/Dropbox/study/fhv/nes20/ma/code/purple-controller/data/01_raw/ --max-delete=-1 --ignore-existing
+
+# purple_auto1:
+#   type: purple_controller.extras.datasets.partitioned_prefixed_data_set.PartitionedDataSet
+#   dataset: pandas.CSVDataSet
+#   path: sftp:///home/au/data/lila/raw/
+#   filename_suffix: .csv
+#   filename_prefix: auto1
+#   credentials: my_fhvdirac_credentials
+
+
+
+_raw_auto: &raw_auto
+  type: purple_controller.extras.datasets.partitioned_prefixed_data_set.IncrementalDataSet
+  dataset:
+    type: pandas.CSVDataSet
+    load_args:
+      delimiter: ";"
+      names: ["id","field2","status","positionLat","positionLon","distanceLastCharge","avgSpeedLastCharge","stateOfCharge"]
+      header: 0
+      na_values: ["undefined", "null"]
+      keep_default_na: True
+  filename_suffix: .csv
+  #filename_prefix: auto1
+  #path: data/01_raw/
+  path: sftp:///home/au/data/lila/raw/
+  credentials: my_fhvdirac_credentials
+
+
+raw_auto1:
+  <<: *raw_auto
+  filename_prefix: auto1
+
+raw_auto2:
+  <<: *raw_auto
+  filename_prefix: auto2
+
+raw_auto3:
+  <<: *raw_auto
+  filename_prefix: auto3
+
+raw_auto4:
+  <<: *raw_auto
+  filename_prefix: auto4
+
+
+
+_table_auto: &table_auto
+  type: pandas.SQLTableDataSet
+  credentials: my_sqlite_creds
+  #table_name: auto1
+  save_args:
+    if_exists: append
+
+table_auto1:
+  <<: *table_auto
+  table_name: auto1
+  
+table_auto2:
+  <<: *table_auto
+  table_name: auto2
+
+table_auto3:
+  <<: *table_auto
+  table_name: auto3
+
+table_auto4:
+  <<: *table_auto
+  table_name: auto4
+
+
+
+raw_config_lila:
+  type: json.JSONDataSet
+  filepath: conf/base/anlage.json
+
+raw_config_cars:
+  type: json.JSONDataSet
+  filepath: conf/base/car_scheme.json
