@@ -3,22 +3,6 @@
 # Documentation for this file format can be found in "The Data Catalog"
 # Link: https://kedro.readthedocs.io/en/stable/05_data/01_data_catalog.html
 
-# purple_lila:
-#   type: purple_controller.extras.datasets.partitioned_prefixed_data_set.IncrementalDataSet
-#   dataset: pandas.CSVDataSet
-#   path: sftp:///home/au/data/lila/raw/
-#   filename_suffix: .csv
-#   filename_prefix: LiLa
-#   credentials: my_fhvdirac_credentials
-
-# purple_auto1:
-#   type: purple_controller.extras.datasets.partitioned_prefixed_data_set.IncrementalDataSet
-#   dataset: pandas.CSVDataSet
-#   path: sftp:///home/au/data/lila/raw/
-#   filename_suffix: .csv
-#   filename_prefix: auto1
-#   credentials: my_fhvdirac_credentials
-
 raw_lila:
   type: purple_controller.extras.datasets.partitioned_prefixed_data_set.IncrementalDataSet
   dataset:
@@ -31,8 +15,8 @@ raw_lila:
       keep_default_na: True
   filename_suffix: .csv
   filename_prefix: LiLa
-  path: sftp:///home/au/data/lila/raw/
-  credentials: my_fhvdirac_credentials
+  path: sftp:///var/local/NodeRed/csv/
+  credentials: my_remotessh_creds
 
 #  path: data/01_raw/
 
@@ -43,18 +27,6 @@ table_lila:
   table_name: lila
   save_args:
     if_exists: append
-
-
-####rsync -azv --rsh=ssh au@dirac.hostingcenter.uclv.net::lila/*.csv /cygdrive/c/Users/Albert/Dropbox/study/fhv/nes20/ma/code/purple-controller/data/01_raw/ --max-delete=-1 --ignore-existing
-
-# purple_auto1:
-#   type: purple_controller.extras.datasets.partitioned_prefixed_data_set.PartitionedDataSet
-#   dataset: pandas.CSVDataSet
-#   path: sftp:///home/au/data/lila/raw/
-#   filename_suffix: .csv
-#   filename_prefix: auto1
-#   credentials: my_fhvdirac_credentials
-
 
 
 _raw_auto: &raw_auto
@@ -70,8 +42,8 @@ _raw_auto: &raw_auto
   filename_suffix: .csv
   #filename_prefix: auto1
   #path: data/01_raw/
-  path: sftp:///home/au/data/lila/raw/
-  credentials: my_fhvdirac_credentials
+  path: sftp:///var/local/NodeRed/csv/
+  credentials: my_remotessh_creds
 
 
 raw_auto1:

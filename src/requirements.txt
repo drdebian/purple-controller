@@ -19,3 +19,4 @@ kedro-viz
 numpy
 pandas
 pulp
+paramiko
