@@ -3,6 +3,14 @@ from typing import Dict, Any, Callable
 
 
 def concatenate_partitions(partitions: Dict[str, pd.DataFrame]) -> pd.DataFrame:
+    """Concatenate partitions from an incremental dataset into a single dataframe.
+
+    Args:
+        partitions (Dict[str, pd.DataFrame]): Dictionary of dataframes to concatenate indexed by partition name
+
+    Returns:
+        pd.DataFrame: Dataframe containing concatenated dataframes
+    """
 
     result = pd.DataFrame()
 
@@ -20,11 +28,28 @@ def concatenate_partitions(partitions: Dict[str, pd.DataFrame]) -> pd.DataFrame:
 
 
 def store_partition(partition: pd.DataFrame) -> pd.DataFrame:
+    """Passthrough function to store a concatenated dataframe partition
+
+    Args:
+        partition (pd.DataFrame): Dataframe containing concatenated partition dataframes
+
+    Returns:
+        pd.DataFrame: Dataframe ready for storage
+    """
 
     return partition
 
 
 def load_lila_config(config_lila: Dict, config_cars: Dict) -> Dict:
+    """Function to parse original system configuration files into format suitable for use in a model
+
+    Args:
+        config_lila (Dict): Nested dictionary containing LiLa configuration parameters
+        config_cars (Dict): Nested dictionary containing car configuration parameters
+
+    Returns:
+        Dict: Flattened dictionary containing consolidated configuration for use in model
+    """
 
     model_config = {}
 

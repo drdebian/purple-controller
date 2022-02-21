@@ -19,6 +19,7 @@ raw_lila:
   credentials: my_remotessh_creds
 
 #  path: data/01_raw/
+#  path: /home/au/data/lila/raw/
 
 
 table_lila:
