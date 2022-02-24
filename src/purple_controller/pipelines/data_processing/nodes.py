@@ -18,13 +18,10 @@ def concatenate_partitions(partitions: Dict[str, pd.DataFrame]) -> pd.DataFrame:
 
         print(partition_key)
         result = pd.concat([result, partition_data], ignore_index=True, sort=False)
-        #result = partition_data
 
     print(result)
 
     return result
-
-    # return lilamain
 
 
 def store_partition(partition: pd.DataFrame) -> pd.DataFrame:
