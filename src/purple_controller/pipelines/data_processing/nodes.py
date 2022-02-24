@@ -58,7 +58,7 @@ def load_lila_config(config_lila: Dict, config_cars: Dict) -> Dict:
 
     model_config['P_CS_MAX'] = {}
     for cs in config_lila['LiLa']['chargingstations']:
-        station = 'station' + str(cs['stationId'])
+        station = 'charger' + str(cs['stationId'])
         model_config['P_CS_MAX'][station] = cs['maxChargingPower']
 
     model_config['E_EV_CAP'] = {}
@@ -66,7 +66,7 @@ def load_lila_config(config_lila: Dict, config_cars: Dict) -> Dict:
     model_config['P_EV_MIN'] = {}
     model_config['vehicles'] = []
     for car in config_cars['cars']:
-        vehicle = 'auto'+str(car['carID'])
+        vehicle = 'car'+str(car['carID'])
         if car['capacity']:
             model_config['E_EV_CAP'][vehicle] = car['capacity']
             model_config['P_EV_MAX'][vehicle] = car['maxChargingPower']
