@@ -32,7 +32,6 @@ def store_partition(partition: pd.DataFrame) -> pd.DataFrame:
 
     Returns:
         pd.DataFrame: Dataframe ready for storage
-        pd.DataFrame: Most current record of partition
     """
 
     return partition
