@@ -37,6 +37,13 @@ def store_partition(partition: pd.DataFrame) -> pd.DataFrame:
     return partition
 
 
+def latest_partition(partition: pd.DataFrame) -> pd.DataFrame:
+
+    lpartition = partition.sort_values(by=['TimeDate'], ascending=False)[0]
+
+    return lpartition
+
+
 def load_lila_config(config_lila: Dict, config_cars: Dict) -> Dict:
     """Function to parse original system configuration files into format suitable for use in a model
 

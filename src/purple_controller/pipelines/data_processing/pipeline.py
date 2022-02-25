@@ -12,7 +12,6 @@ def create_pipeline(**kwargs):
                 outputs="config_model",
                 name="load_lila_config_node",
             ),
-
             node(
                 func=concatenate_partitions,
                 inputs="raw_location",
