@@ -1,5 +1,5 @@
 import pandas as pd
-from typing import Dict, Any, Callable
+from typing import Dict, Any, Callable, Tuple
 
 
 def concatenate_partitions(partitions: Dict[str, pd.DataFrame]) -> pd.DataFrame:
@@ -32,6 +32,7 @@ def store_partition(partition: pd.DataFrame) -> pd.DataFrame:
 
     Returns:
         pd.DataFrame: Dataframe ready for storage
+        pd.DataFrame: Most current record of partition
     """
 
     return partition
@@ -39,7 +40,9 @@ def store_partition(partition: pd.DataFrame) -> pd.DataFrame:
 
 def latest_partition(partition: pd.DataFrame) -> pd.DataFrame:
 
-    lpartition = partition.sort_values(by=['TimeDate'], ascending=False)[0]
+    lpartition = partition.copy()
+    lpartition = lpartition.sort_values(by=['TimeDate'], ascending=False).head(1)
+    print(lpartition)
 
     return lpartition
 

@@ -25,6 +25,8 @@ def create_pipeline(**kwargs):
                 name="store_location_node",
                 confirms="raw_location"
             ),
+
+
             node(
                 func=concatenate_partitions,
                 inputs="raw_charger1",
@@ -38,6 +40,7 @@ def create_pipeline(**kwargs):
                 name="store_charger1_node",
                 confirms="raw_charger1"
             ),
+
             node(
                 func=concatenate_partitions,
                 inputs="raw_charger2",
@@ -51,6 +54,7 @@ def create_pipeline(**kwargs):
                 name="store_charger2_node",
                 confirms="raw_charger2"
             ),
+
             node(
                 func=concatenate_partitions,
                 inputs="raw_charger3",
@@ -65,6 +69,7 @@ def create_pipeline(**kwargs):
                 name="store_charger3_node",
                 confirms="raw_charger3"
             ),
+
             node(
                 func=concatenate_partitions,
                 inputs="raw_charger4",
@@ -79,6 +84,7 @@ def create_pipeline(**kwargs):
                 name="store_charger4_node",
                 confirms="raw_charger4"
             ),
+
             node(
                 func=concatenate_partitions,
                 inputs="raw_charger5",
@@ -93,6 +99,8 @@ def create_pipeline(**kwargs):
                 name="store_charger5_node",
                 confirms="raw_charger5"
             ),
+
+
             node(
                 func=concatenate_partitions,
                 inputs="raw_charger6",
@@ -107,6 +115,7 @@ def create_pipeline(**kwargs):
                 name="store_charger6_node",
                 confirms="raw_charger6"
             ),
+
             node(
                 func=concatenate_partitions,
                 inputs="raw_car1",
@@ -121,6 +130,7 @@ def create_pipeline(**kwargs):
                 name="store_car1_node",
                 confirms="raw_car1"
             ),
+
             node(
                 func=concatenate_partitions,
                 inputs="raw_car2",
@@ -135,6 +145,7 @@ def create_pipeline(**kwargs):
                 name="store_car2_node",
                 confirms="raw_car2"
             ),
+
             node(
                 func=concatenate_partitions,
                 inputs="raw_car3",
@@ -149,6 +160,7 @@ def create_pipeline(**kwargs):
                 name="store_car3_node",
                 confirms="raw_car3"
             ),
+
             node(
                 func=concatenate_partitions,
                 inputs="raw_car4",
@@ -163,6 +175,7 @@ def create_pipeline(**kwargs):
                 name="store_car4_node",
                 confirms="raw_car4"
             ),
+
             node(
                 func=concatenate_partitions,
                 inputs="raw_car5",
@@ -177,6 +190,7 @@ def create_pipeline(**kwargs):
                 name="store_car5_node",
                 confirms="raw_car5"
             ),
+
             node(
                 func=concatenate_partitions,
                 inputs="raw_car6",

@@ -3,20 +3,20 @@
 # Documentation for this file format can be found in "The Data Catalog"
 # Link: https://kedro.readthedocs.io/en/stable/05_data/01_data_catalog.html
 
-raw_lila:
-  type: purple_controller.extras.datasets.partitioned_prefixed_data_set.IncrementalDataSet
-  dataset:
-    type: pandas.CSVDataSet
-    load_args:
-      delimiter: ";"
-      #names: ["TimeDate","PV-W","Kreisel Arbeitsmodus","Kreisel-Ladeleistung","Kreisel-Entladeleistung","Kreisel-SOC","Keba-X1-Ladeleistung","Keba-X1-Phase1-Watt","Keba-X1-Phase2-Watt","Keba-X1-Phase3-Watt","Keba-C1-Ladeleistung","Keba-C1-Phase1-Watt","Keba-C1-Phase2-Watt","Keba-C1-Phase3-Watt"]
-      #header: 0
-      na_values: ["undefined", "null"]
-      keep_default_na: True
-  filename_suffix: .csv
-  filename_prefix: LiLa
-  path: sftp:///var/local/NodeRed/csv/
-  credentials: my_remotessh_creds
+# raw_lila:
+#   type: purple_controller.extras.datasets.partitioned_prefixed_data_set.IncrementalDataSet
+#   dataset:
+#     type: pandas.CSVDataSet
+#     load_args:
+#       delimiter: ";"
+#       #names: ["TimeDate","PV-W","Kreisel Arbeitsmodus","Kreisel-Ladeleistung","Kreisel-Entladeleistung","Kreisel-SOC","Keba-X1-Ladeleistung","Keba-X1-Phase1-Watt","Keba-X1-Phase2-Watt","Keba-X1-Phase3-Watt","Keba-C1-Ladeleistung","Keba-C1-Phase1-Watt","Keba-C1-Phase2-Watt","Keba-C1-Phase3-Watt"]
+#       #header: 0
+#       na_values: ["undefined", "null"]
+#       keep_default_na: True
+#   filename_suffix: .csv
+#   filename_prefix: LiLa
+#   path: sftp:///var/local/NodeRed/csv/
+#   credentials: my_remotessh_creds
 
 #  path: data/01_raw/
 #  path: /home/au/data/lila/raw/
@@ -32,6 +32,7 @@ raw_location:
   filename_suffix: .csv
   path: sftp:///var/local/NodeRed/location
   credentials: my_remotessh_creds
+  layer: raw
 
 _raw_charger: &raw_charger
   type: IncrementalDataSet
@@ -44,6 +45,7 @@ _raw_charger: &raw_charger
   filename_suffix: .csv
   path: sftp:///var/local/NodeRed/charger
   credentials: my_remotessh_creds
+  layer: raw
 
 raw_charger1:
   <<: *raw_charger
@@ -81,6 +83,7 @@ _raw_car: &raw_car
   filename_suffix: .csv
   path: sftp:///var/local/NodeRed/cars
   credentials: my_remotessh_creds
+  layer: raw
 
 raw_car1:
   <<: *raw_car
@@ -116,12 +119,12 @@ raw_carsample2:
 
 
 
-table_lila:
-  type: pandas.SQLTableDataSet
-  credentials: my_sqlite_creds
-  table_name: lila
-  save_args:
-    if_exists: append
+# table_lila:
+#   type: pandas.SQLTableDataSet
+#   credentials: my_sqlite_creds
+#   table_name: lila
+#   save_args:
+#     if_exists: append
 
 
 table_location:
@@ -130,7 +133,7 @@ table_location:
   table_name: location
   save_args:
     if_exists: append
-
+  layer: primary
 
 _table_charger: &table_charger
   type: pandas.SQLTableDataSet
@@ -138,6 +141,7 @@ _table_charger: &table_charger
   table_name: charger
   save_args:
     if_exists: append
+  layer: primary
 
 table_charger1:
   <<: *table_charger
@@ -170,6 +174,7 @@ _table_car: &table_car
   table_name: car
   save_args:
     if_exists: append
+  layer: primary
 
 table_car1:
   <<: *table_car
@@ -206,63 +211,63 @@ table_carsample2:
 
 
 
-_raw_auto: &raw_auto
-  type: purple_controller.extras.datasets.partitioned_prefixed_data_set.IncrementalDataSet
-  dataset:
-    type: pandas.CSVDataSet
-    load_args:
-      delimiter: ";"
-      names: ["id","field2","status","positionLat","positionLon","distanceLastCharge","avgSpeedLastCharge","stateOfCharge"]
-      header: 0
-      na_values: ["undefined", "null"]
-      keep_default_na: True
-  filename_suffix: .csv
-  #filename_prefix: auto1
-  #path: data/01_raw/
-  path: sftp:///var/local/NodeRed/csv/
-  credentials: my_remotessh_creds
+# _raw_auto: &raw_auto
+#   type: purple_controller.extras.datasets.partitioned_prefixed_data_set.IncrementalDataSet
+#   dataset:
+#     type: pandas.CSVDataSet
+#     load_args:
+#       delimiter: ";"
+#       names: ["id","field2","status","positionLat","positionLon","distanceLastCharge","avgSpeedLastCharge","stateOfCharge"]
+#       header: 0
+#       na_values: ["undefined", "null"]
+#       keep_default_na: True
+#   filename_suffix: .csv
+#   #filename_prefix: auto1
+#   #path: data/01_raw/
+#   path: sftp:///var/local/NodeRed/csv/
+#   credentials: my_remotessh_creds
 
 
-raw_auto1:
-  <<: *raw_auto
-  filename_prefix: auto1
+# raw_auto1:
+#   <<: *raw_auto
+#   filename_prefix: auto1
 
-raw_auto2:
-  <<: *raw_auto
-  filename_prefix: auto2
+# raw_auto2:
+#   <<: *raw_auto
+#   filename_prefix: auto2
 
-raw_auto3:
-  <<: *raw_auto
-  filename_prefix: auto3
+# raw_auto3:
+#   <<: *raw_auto
+#   filename_prefix: auto3
 
-raw_auto4:
-  <<: *raw_auto
-  filename_prefix: auto4
+# raw_auto4:
+#   <<: *raw_auto
+#   filename_prefix: auto4
 
 
 
-_table_auto: &table_auto
-  type: pandas.SQLTableDataSet
-  credentials: my_sqlite_creds
-  #table_name: auto1
-  save_args:
-    if_exists: append
+# _table_auto: &table_auto
+#   type: pandas.SQLTableDataSet
+#   credentials: my_sqlite_creds
+#   #table_name: auto1
+#   save_args:
+#     if_exists: append
 
-table_auto1:
-  <<: *table_auto
-  table_name: auto1
+# table_auto1:
+#   <<: *table_auto
+#   table_name: auto1
   
-table_auto2:
-  <<: *table_auto
-  table_name: auto2
+# table_auto2:
+#   <<: *table_auto
+#   table_name: auto2
 
-table_auto3:
-  <<: *table_auto
-  table_name: auto3
+# table_auto3:
+#   <<: *table_auto
+#   table_name: auto3
 
-table_auto4:
-  <<: *table_auto
-  table_name: auto4
+# table_auto4:
+#   <<: *table_auto
+#   table_name: auto4
 
 
 
@@ -279,8 +284,10 @@ raw_config_lila:
   type: json.JSONDataSet
   filepath: sftp:///var/local/NodeRed/json/anlage.json
   credentials: my_remotessh_creds
+  layer: intermediate
 
 raw_config_cars:
   type: json.JSONDataSet
   filepath: sftp:///var/local/NodeRed/json/cars.json
   credentials: my_remotessh_creds
+  layer: intermediate
