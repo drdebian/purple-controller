@@ -1,4 +1,4 @@
-create view location_15min_avg as 
+--create view location_15min_avg as 
 
 with cte0 as 
 (select 
