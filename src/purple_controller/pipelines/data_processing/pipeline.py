@@ -1,6 +1,6 @@
 from kedro.pipeline import Pipeline, node
 
-from .nodes import concatenate_partitions, load_lila_config, store_partition
+from .nodes import concatenate_partitions, get_ev_data, load_lila_config, store_partition
 
 
 def create_pipeline(**kwargs):
@@ -234,6 +234,12 @@ def create_pipeline(**kwargs):
             ),
 
 
+            node(
+                func=get_ev_data,
+                inputs=["concatenated_carsample1", "ev_data"],
+                outputs="all_cars",
+                name="get_ev_data_node",
+            ),
 
 
         ]

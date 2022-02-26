@@ -197,3 +197,11 @@ raw_config_cars:
   filepath: sftp:///var/local/NodeRed/json/cars.json
   credentials: my_remotessh_creds
   layer: intermediate
+
+
+ev_data:
+  type: pandas.SQLQueryDataSet
+  credentials: my_sqlite_creds
+  filepath: src/sqlstatements/cars_15min_avg.sql
+  load_args:
+    index: ['vehicle', 'timestamp']
