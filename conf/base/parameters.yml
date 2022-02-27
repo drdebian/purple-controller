@@ -1,0 +1,11 @@
+timing:
+  #T: 24 # should be calculated as M_LA/M_DT!
+  M_DT: .25 #1
+  M_LA: 24 # lookahead hours
+  M_LB: 8 # lookback days
+  M_ST: "2016-01-15 00:00:40.188679" # start timestamp
+
+solverparams:
+  gap_relative: .1
+  gap_absolute: .1
+  timelimit: 600
