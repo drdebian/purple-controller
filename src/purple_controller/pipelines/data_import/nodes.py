@@ -78,17 +78,17 @@ def store_partition(partition: pd.DataFrame) -> pd.DataFrame:
     return partition
 
 
-def latest_partition(partition: pd.DataFrame) -> pd.DataFrame:
+# def latest_partition(partition: pd.DataFrame) -> pd.DataFrame:
 
-    lpartition = partition.copy()
-    lpartition = lpartition.sort_values(by=['TimeDate'], ascending=False).head(1)
-    print(lpartition)
+#     lpartition = partition.copy()
+#     lpartition = lpartition.sort_values(by=['TimeDate'], ascending=False).head(1)
+#     print(lpartition)
 
-    return lpartition
+#     return lpartition
 
 
-def get_ev_data(partition: pd.DataFrame, ev_data: pd.DataFrame) -> pd.DataFrame:
+# def get_ev_data(partition: pd.DataFrame, ev_data: pd.DataFrame) -> pd.DataFrame:
 
-    print(ev_data)
+#     print(ev_data)
 
-    return ev_data
+#     return ev_data
