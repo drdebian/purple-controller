@@ -4,7 +4,8 @@ generated using Kedro 0.17.6
 """
 
 from kedro.pipeline import Pipeline, node
-from .nodes import get_ev_data, load_lila_config
+from .nodes import get_ev_data
+from purple_controller.commons.nodes import load_lila_config
 
 
 def create_pipeline(**kwargs):
