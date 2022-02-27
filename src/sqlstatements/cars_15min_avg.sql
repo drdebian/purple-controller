@@ -63,98 +63,103 @@ ctea6 as (
         'car6' as vehicle,
         a.*
     from car6 a
-), cte0 as 
-(select a.vehicle,
-    a.TimeDate15m as [timestamp],
-    max([id]) as [id],
-    max([status]) as [status],
-    round(avg([positionLat]), 5) as [positionLat],
-    round(avg([positionLon]), 5) as [positionLon],
-    round(avg([distanceLastCharge]), 0) as [distanceLastCharge],
-    round(avg([avgSpeedLastCharge]), 0) as [avgSpeedLastCharge],
-    round(avg([stateOfCharge]), 0) as [stateOfCharge],
-    round(avg([remainingRange]), 0) as [remainingRange],
-    round(avg([remainingEnergy]), 0) as [remainingEnergy],
-    count(*) as cntMeasurements
-from ctea1 a
-group by a.TimeDate15m
-union
-select a.vehicle,
-    a.TimeDate15m as [timestamp],
-    max([id]) as [id],
-    max([status]) as [status],
-    round(avg([positionLat]), 5) as [positionLat],
-    round(avg([positionLon]), 5) as [positionLon],
-    round(avg([distanceLastCharge]), 0) as [distanceLastCharge],
-    round(avg([avgSpeedLastCharge]), 0) as [avgSpeedLastCharge],
-    round(avg([stateOfCharge]), 0) as [stateOfCharge],
-    round(avg([remainingRange]), 0) as [remainingRange],
-    round(avg([remainingEnergy]), 0) as [remainingEnergy],
-    count(*) as cntMeasurements
-from ctea2 a
-group by a.TimeDate15m
-union
-select a.vehicle,
-    a.TimeDate15m as [timestamp],
-    max([id]) as [id],
-    max([status]) as [status],
-    round(avg([positionLat]), 5) as [positionLat],
-    round(avg([positionLon]), 5) as [positionLon],
-    round(avg([distanceLastCharge]), 0) as [distanceLastCharge],
-    round(avg([avgSpeedLastCharge]), 0) as [avgSpeedLastCharge],
-    round(avg([stateOfCharge]), 0) as [stateOfCharge],
-    round(avg([remainingRange]), 0) as [remainingRange],
-    round(avg([remainingEnergy]), 0) as [remainingEnergy],
-    count(*) as cntMeasurements
-from ctea3 a
-group by a.TimeDate15m
-union
-select a.vehicle,
-    a.TimeDate15m as [timestamp],
-    max([id]) as [id],
-    max([status]) as [status],
-    round(avg([positionLat]), 5) as [positionLat],
-    round(avg([positionLon]), 5) as [positionLon],
-    round(avg([distanceLastCharge]), 0) as [distanceLastCharge],
-    round(avg([avgSpeedLastCharge]), 0) as [avgSpeedLastCharge],
-    round(avg([stateOfCharge]), 0) as [stateOfCharge],
-    round(avg([remainingRange]), 0) as [remainingRange],
-    round(avg([remainingEnergy]), 0) as [remainingEnergy],
-    count(*) as cntMeasurements
-from ctea4 a
-group by a.TimeDate15m
-union
-select a.vehicle,
-    a.TimeDate15m as [timestamp],
-    max([id]) as [id],
-    max([status]) as [status],
-    round(avg([positionLat]), 5) as [positionLat],
-    round(avg([positionLon]), 5) as [positionLon],
-    round(avg([distanceLastCharge]), 0) as [distanceLastCharge],
-    round(avg([avgSpeedLastCharge]), 0) as [avgSpeedLastCharge],
-    round(avg([stateOfCharge]), 0) as [stateOfCharge],
-    round(avg([remainingRange]), 0) as [remainingRange],
-    round(avg([remainingEnergy]), 0) as [remainingEnergy],
-    count(*) as cntMeasurements
-from ctea5 a
-group by a.TimeDate15m
-union
-select a.vehicle,
-    a.TimeDate15m as [timestamp],
-    max([id]) as [id],
-    max([status]) as [status],
-    round(avg([positionLat]), 5) as [positionLat],
-    round(avg([positionLon]), 5) as [positionLon],
-    round(avg([distanceLastCharge]), 0) as [distanceLastCharge],
-    round(avg([avgSpeedLastCharge]), 0) as [avgSpeedLastCharge],
-    round(avg([stateOfCharge]), 0) as [stateOfCharge],
-    round(avg([remainingRange]), 0) as [remainingRange],
-    round(avg([remainingEnergy]), 0) as [remainingEnergy],
-    count(*) as cntMeasurements
-from ctea6 a
-group by a.TimeDate15m)
-select *  
+),
+cte0 as (
+    select a.vehicle,
+        a.TimeDate15m as [timestamp],
+        max([id]) as [id],
+        max([status]) as [status],
+        round(avg([positionLat]), 5) as [positionLat],
+        round(avg([positionLon]), 5) as [positionLon],
+        round(avg([distanceLastCharge]), 0) as [distanceLastCharge],
+        round(avg([avgSpeedLastCharge]), 0) as [avgSpeedLastCharge],
+        round(avg([stateOfCharge]), 0) as [stateOfCharge],
+        round(avg([remainingRange]), 0) as [remainingRange],
+        round(avg([remainingEnergy]), 0) as [remainingEnergy],
+        count(*) as cntMeasurements
+    from ctea1 a
+    group by a.TimeDate15m
+    union
+    select a.vehicle,
+        a.TimeDate15m as [timestamp],
+        max([id]) as [id],
+        max([status]) as [status],
+        round(avg([positionLat]), 5) as [positionLat],
+        round(avg([positionLon]), 5) as [positionLon],
+        round(avg([distanceLastCharge]), 0) as [distanceLastCharge],
+        round(avg([avgSpeedLastCharge]), 0) as [avgSpeedLastCharge],
+        round(avg([stateOfCharge]), 0) as [stateOfCharge],
+        round(avg([remainingRange]), 0) as [remainingRange],
+        round(avg([remainingEnergy]), 0) as [remainingEnergy],
+        count(*) as cntMeasurements
+    from ctea2 a
+    group by a.TimeDate15m
+    union
+    select a.vehicle,
+        a.TimeDate15m as [timestamp],
+        max([id]) as [id],
+        max([status]) as [status],
+        round(avg([positionLat]), 5) as [positionLat],
+        round(avg([positionLon]), 5) as [positionLon],
+        round(avg([distanceLastCharge]), 0) as [distanceLastCharge],
+        round(avg([avgSpeedLastCharge]), 0) as [avgSpeedLastCharge],
+        round(avg([stateOfCharge]), 0) as [stateOfCharge],
+        round(avg([remainingRange]), 0) as [remainingRange],
+        round(avg([remainingEnergy]), 0) as [remainingEnergy],
+        count(*) as cntMeasurements
+    from ctea3 a
+    group by a.TimeDate15m
+    union
+    select a.vehicle,
+        a.TimeDate15m as [timestamp],
+        max([id]) as [id],
+        max([status]) as [status],
+        round(avg([positionLat]), 5) as [positionLat],
+        round(avg([positionLon]), 5) as [positionLon],
+        round(avg([distanceLastCharge]), 0) as [distanceLastCharge],
+        round(avg([avgSpeedLastCharge]), 0) as [avgSpeedLastCharge],
+        round(avg([stateOfCharge]), 0) as [stateOfCharge],
+        round(avg([remainingRange]), 0) as [remainingRange],
+        round(avg([remainingEnergy]), 0) as [remainingEnergy],
+        count(*) as cntMeasurements
+    from ctea4 a
+    group by a.TimeDate15m
+    union
+    select a.vehicle,
+        a.TimeDate15m as [timestamp],
+        max([id]) as [id],
+        max([status]) as [status],
+        round(avg([positionLat]), 5) as [positionLat],
+        round(avg([positionLon]), 5) as [positionLon],
+        round(avg([distanceLastCharge]), 0) as [distanceLastCharge],
+        round(avg([avgSpeedLastCharge]), 0) as [avgSpeedLastCharge],
+        round(avg([stateOfCharge]), 0) as [stateOfCharge],
+        round(avg([remainingRange]), 0) as [remainingRange],
+        round(avg([remainingEnergy]), 0) as [remainingEnergy],
+        count(*) as cntMeasurements
+    from ctea5 a
+    group by a.TimeDate15m
+    union
+    select a.vehicle,
+        a.TimeDate15m as [timestamp],
+        max([id]) as [id],
+        max([status]) as [status],
+        round(avg([positionLat]), 5) as [positionLat],
+        round(avg([positionLon]), 5) as [positionLon],
+        round(avg([distanceLastCharge]), 0) as [distanceLastCharge],
+        round(avg([avgSpeedLastCharge]), 0) as [avgSpeedLastCharge],
+        round(avg([stateOfCharge]), 0) as [stateOfCharge],
+        round(avg([remainingRange]), 0) as [remainingRange],
+        round(avg([remainingEnergy]), 0) as [remainingEnergy],
+        count(*) as cntMeasurements
+    from ctea6 a
+    group by a.TimeDate15m
+)
+select b.*,
+    LAG(b.stateOfCharge, 1, b.stateOfCharge) over (
+        partition by b.vehicle
+        order by b.vehicle,
+            b.timestamp
+    ) - b.stateOfCharge as chgSOC
 from cte0 b
 where b.timestamp >= datetime('now', '-8 days')
-    
-
