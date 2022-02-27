@@ -9,3 +9,7 @@ solverparams:
   gap_relative: .1
   gap_absolute: .1
   timelimit: 600
+
+location:
+  lat: 47.44969
+  lon: 9.91852
