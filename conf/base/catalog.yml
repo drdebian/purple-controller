@@ -216,3 +216,19 @@ ev_data:
   load_args:
     index_col: ['vehicle', 'timestamp']
   layer: primary
+
+charger_data:
+  type: pandas.SQLQueryDataSet
+  credentials: my_sqlite_creds
+  filepath: src/sqlstatements/chargers_15min_avg.sql
+  load_args:
+    index_col: ['station', 'timestamp']
+  layer: primary
+
+location_data:
+  type: pandas.SQLQueryDataSet
+  credentials: my_sqlite_creds
+  filepath: src/sqlstatements/location_15min_avg.sql
+  load_args:
+    index_col: ['timestamp']
+  layer: primary
