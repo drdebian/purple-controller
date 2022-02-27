@@ -3,7 +3,7 @@ from typing import Dict
 
 from kedro.pipeline import Pipeline
 
-from purple_controller.pipelines import data_import as di
+#from purple_controller.pipelines import data_import as di
 from purple_controller.pipelines import data_processing as dp
 
 

@@ -45,6 +45,9 @@ def load_lila_config(config_lila: Dict, config_cars: Dict) -> Dict:
 
     print(model_config)
 
+    # print(config_cars)
+    # print(config_lila)
+
     return model_config
 
 
