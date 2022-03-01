@@ -5,101 +5,101 @@
 
 
 
-# raw_location:
-#   type: IncrementalDataSet
-#   dataset:
-#     type: pandas.CSVDataSet
-#     load_args:
-#       delimiter: ";"
-#       na_values: ["undefined", "null"]
-#       keep_default_na: True
-#   filename_suffix: .csv
-#   path: sftp:///var/local/NodeRed/location
-#   credentials: my_remotessh_creds
-#   layer: raw
+raw_location:
+  type: IncrementalDataSet
+  dataset:
+    type: pandas.CSVDataSet
+    load_args:
+      delimiter: ";"
+      na_values: ["undefined", "null"]
+      keep_default_na: True
+  filename_suffix: .csv
+  path: sftp:///var/local/NodeRed/location
+  credentials: my_remotessh_creds
+  layer: raw
 
-# _raw_charger: &raw_charger
-#   type: IncrementalDataSet
-#   dataset:
-#     type: pandas.CSVDataSet
-#     load_args:
-#       delimiter: ";"
-#       na_values: ["undefined", "null"]
-#       keep_default_na: True
-#   filename_suffix: .csv
-#   path: sftp:///var/local/NodeRed/charger
-#   credentials: my_remotessh_creds
-#   layer: raw
+_raw_charger: &raw_charger
+  type: IncrementalDataSet
+  dataset:
+    type: pandas.CSVDataSet
+    load_args:
+      delimiter: ";"
+      na_values: ["undefined", "null"]
+      keep_default_na: True
+  filename_suffix: .csv
+  path: sftp:///var/local/NodeRed/charger
+  credentials: my_remotessh_creds
+  layer: raw
 
-# raw_charger1:
-#   <<: *raw_charger
-#   path: sftp:///var/local/NodeRed/charger/wallbox1
+raw_charger1:
+  <<: *raw_charger
+  path: sftp:///var/local/NodeRed/charger/wallbox1
 
-# raw_charger2:
-#   <<: *raw_charger
-#   path: sftp:///var/local/NodeRed/charger/wallbox2
+raw_charger2:
+  <<: *raw_charger
+  path: sftp:///var/local/NodeRed/charger/wallbox2
 
-# raw_charger3:
-#   <<: *raw_charger
-#   path: sftp:///var/local/NodeRed/charger/wallbox3
+raw_charger3:
+  <<: *raw_charger
+  path: sftp:///var/local/NodeRed/charger/wallbox3
 
-# raw_charger4:
-#   <<: *raw_charger
-#   path: sftp:///var/local/NodeRed/charger/wallbox4
+raw_charger4:
+  <<: *raw_charger
+  path: sftp:///var/local/NodeRed/charger/wallbox4
 
-# raw_charger5:
-#   <<: *raw_charger
-#   path: sftp:///var/local/NodeRed/charger/wallbox5
+raw_charger5:
+  <<: *raw_charger
+  path: sftp:///var/local/NodeRed/charger/wallbox5
 
-# raw_charger6:
-#   <<: *raw_charger
-#   path: sftp:///var/local/NodeRed/charger/wallbox6
+raw_charger6:
+  <<: *raw_charger
+  path: sftp:///var/local/NodeRed/charger/wallbox6
 
 
-# _raw_car: &raw_car
-#   type: IncrementalDataSet
-#   dataset:
-#     type: pandas.CSVDataSet
-#     load_args:
-#       delimiter: ";"
-#       na_values: ["undefined", "null"]
-#       keep_default_na: True
-#   filename_suffix: .csv
-#   path: sftp:///var/local/NodeRed/cars
-#   credentials: my_remotessh_creds
-#   layer: raw
+_raw_car: &raw_car
+  type: IncrementalDataSet
+  dataset:
+    type: pandas.CSVDataSet
+    load_args:
+      delimiter: ";"
+      na_values: ["undefined", "null"]
+      keep_default_na: True
+  filename_suffix: .csv
+  path: sftp:///var/local/NodeRed/cars
+  credentials: my_remotessh_creds
+  layer: raw
 
-# raw_car1:
-#   <<: *raw_car
-#   path: sftp:///var/local/NodeRed/cars/car1
+raw_car1:
+  <<: *raw_car
+  path: sftp:///var/local/NodeRed/cars/car1
 
-# raw_car2:
-#   <<: *raw_car
-#   path: sftp:///var/local/NodeRed/cars/car2
+raw_car2:
+  <<: *raw_car
+  path: sftp:///var/local/NodeRed/cars/car2
 
-# raw_car3:
-#   <<: *raw_car
-#   path: sftp:///var/local/NodeRed/cars/car3
+raw_car3:
+  <<: *raw_car
+  path: sftp:///var/local/NodeRed/cars/car3
 
-# raw_car4:
-#   <<: *raw_car
-#   path: sftp:///var/local/NodeRed/cars/car4
+raw_car4:
+  <<: *raw_car
+  path: sftp:///var/local/NodeRed/cars/car4
 
-# raw_car5:
-#   <<: *raw_car
-#   path: sftp:///var/local/NodeRed/cars/car5
+raw_car5:
+  <<: *raw_car
+  path: sftp:///var/local/NodeRed/cars/car5
 
-# raw_car6:
-#   <<: *raw_car
-#   path: sftp:///var/local/NodeRed/cars/car6
+raw_car6:
+  <<: *raw_car
+  path: sftp:///var/local/NodeRed/cars/car6
 
-# raw_carsample1:
-#   <<: *raw_car
-#   path: sftp:///var/local/NodeRed/cars/sample1
+raw_carsample1:
+  <<: *raw_car
+  path: sftp:///var/local/NodeRed/cars/sample1
 
-# raw_carsample2:
-#   <<: *raw_car
-#   path: sftp:///var/local/NodeRed/cars/sample2
+raw_carsample2:
+  <<: *raw_car
+  path: sftp:///var/local/NodeRed/cars/sample2
 
 
 

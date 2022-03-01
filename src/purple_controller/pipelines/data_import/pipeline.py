@@ -1,17 +1,17 @@
 from kedro.pipeline import Pipeline, node
 
-from .nodes import concatenate_partitions, load_lila_config, store_partition
+from .nodes import concatenate_partitions, store_partition
 
 
 def create_pipeline(**kwargs):
     return Pipeline(
         [
-            node(
-                func=load_lila_config,
-                inputs=["raw_config_lila", "raw_config_cars"],
-                outputs="config_model",
-                name="load_lila_config_node",
-            ),
+            # node(
+            #     func=load_lila_config,
+            #     inputs=["raw_config_lila", "raw_config_cars"],
+            #     outputs="config_model",
+            #     name="load_lila_config_node",
+            # ),
             node(
                 func=concatenate_partitions,
                 inputs="raw_location",
@@ -234,12 +234,7 @@ def create_pipeline(**kwargs):
             ),
 
 
-            # node(
-            #     func=get_ev_data,
-            #     inputs=["concatenated_carsample1", "ev_data"],
-            #     outputs="all_cars",
-            #     name="get_ev_data_node",
-            # ),
+
 
 
         ]
