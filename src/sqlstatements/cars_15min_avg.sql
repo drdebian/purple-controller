@@ -162,4 +162,5 @@ select b.*,
             b.timestamp
     ) - b.stateOfCharge as chgSOC
 from cte0 b
-where b.timestamp >= datetime('now', '-8 days')
+    /* where b.timestamp >= datetime('now', '-8 days') 
+     */

@@ -3,7 +3,7 @@ timing:
   M_DT: .25 #1
   M_LA: 24 # lookahead hours
   M_LB: 8 # lookback days
-  M_ST: "2016-01-15 00:00:40.188679" # start timestamp
+  M_ST: "2022-03-01 08:07:09.188679" #"2016-01-15 00:00:40.188679" # start timestamp
 
 solverparams:
   gap_relative: .1
