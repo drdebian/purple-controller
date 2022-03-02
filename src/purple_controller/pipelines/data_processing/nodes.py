@@ -8,7 +8,20 @@ import numpy as np
 from typing import Dict, Any, Callable, Tuple
 
 
-def load_pv_data(raw_pv_data: pd.DataFrame, timing: Dict, constants: Dict) -> pd.DataFrame:
+def depend_on_imported_data(**kwargs) -> Any:
+    """dummy function to ensure data import is complete before database queries
+
+    Returns:
+        Any: _description_
+    """
+    result = 0
+    for name, data in kwargs.items():
+        result += 1
+
+    return result
+
+
+def load_pv_data(data_ready: Any, raw_pv_data: pd.DataFrame, timing: Dict, constants: Dict) -> pd.DataFrame:
 
     freq = int(60*timing['M_DT'])
 
@@ -24,7 +37,7 @@ def load_pv_data(raw_pv_data: pd.DataFrame, timing: Dict, constants: Dict) -> pd
     return my_pv
 
 
-def load_ev_data(raw_ev_data: pd.DataFrame, config_model: Dict, timing: Dict, location: Dict) -> pd.DataFrame:
+def load_ev_data(data_ready: Any, raw_ev_data: pd.DataFrame, config_model: Dict, timing: Dict, location: Dict) -> pd.DataFrame:
 
     my_vehicles = config_model['vehicles']
     freq = int(60*timing['M_DT'])

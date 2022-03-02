@@ -24,7 +24,7 @@ def concatenate_partitions(partitions: Dict[str, pd.DataFrame]) -> pd.DataFrame:
     return result
 
 
-def store_partition(partition: pd.DataFrame) -> pd.DataFrame:
+def store_partition(partition: pd.DataFrame) -> Tuple:  # pd.DataFrame:
     """Passthrough function to store a concatenated dataframe partition
 
     Args:
@@ -32,22 +32,9 @@ def store_partition(partition: pd.DataFrame) -> pd.DataFrame:
 
     Returns:
         pd.DataFrame: Dataframe ready for storage
+        int: number of records in Dataframe
     """
 
-    return partition
+    rowcount = len(partition)
 
-
-# def latest_partition(partition: pd.DataFrame) -> pd.DataFrame:
-
-#     lpartition = partition.copy()
-#     lpartition = lpartition.sort_values(by=['TimeDate'], ascending=False).head(1)
-#     print(lpartition)
-
-#     return lpartition
-
-
-# def get_ev_data(partition: pd.DataFrame, ev_data: pd.DataFrame) -> pd.DataFrame:
-
-#     print(ev_data)
-
-#     return ev_data
+    return partition, rowcount

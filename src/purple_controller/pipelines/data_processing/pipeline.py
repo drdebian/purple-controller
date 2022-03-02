@@ -4,7 +4,7 @@ generated using Kedro 0.17.6
 """
 
 from kedro.pipeline import Pipeline, node
-from .nodes import get_ev_data, load_ev_data, load_pv_data
+from .nodes import depend_on_imported_data, get_ev_data, load_ev_data, load_pv_data
 from purple_controller.commons.nodes import load_lila_config
 
 
@@ -18,17 +18,27 @@ def create_pipeline(**kwargs):
         ),
         node(
             func=load_pv_data,
-            inputs=["location_data", "params:timing", "config_model"],
+            inputs=["data_ready", "location_data", "params:timing", "config_model"],
             outputs="processed_pv_data",
             name="load_pv_data_node",
         ),
         node(
             func=load_ev_data,
-            inputs=["ev_data", "config_model", "params:timing", "params:location"],
+            inputs=["data_ready", "ev_data", "config_model",
+                    "params:timing", "params:location"],
             outputs="processed_ev_data",
             name="load_ev_data_node",
         ),
 
+        node(
+            func=depend_on_imported_data,
+            inputs={"rowcount_location": "rowcount_location",
+                    "rowcount_car1": "rowcount_car1",
+                    "rowcount_car2": "rowcount_car2",
+                    },
+            outputs="data_ready",
+            name="depend_on_imported_data_node",
+        ),
 
 
 
