@@ -60,14 +60,13 @@ def load_lila_config(config_lila: Dict, config_cars: Dict) -> Dict:
 
 def get_model_timestamps(timing: Dict) -> Dict[str, pd.Timestamp]:
 
-    print(timing['M_ST'])
-    print(timing['M_DT'])
-    print(timing['M_LA'])
-    print(timing['M_LB'])
-    print(timing['M_LB']*24*int(60*timing['M_DT']))
+    if timing['M_ST'] == 'now':
+        start = pd.Timestamp.now()
+    else:
+        start = pd.Timestamp(timing['M_ST'])
 
-    start = pd.Timestamp(timing['M_ST'])
-    start = start.round(str(int(60*timing['M_DT']))+'T')
+    start = start.round(str(int(60*timing['M_DT']))+'T') + \
+        pd.Timedelta(1*int(60*timing['M_DT']), 'T')
 
     my_now = start  # + pd.Timedelta(i*int(60*c1['M_DT']), 'T')
 
@@ -117,8 +116,7 @@ def get_history_pv_data(my_pv: pd.DataFrame, my_timestamps: Dict) -> pd.DataFram
 
 
 def get_history_ev_data(my_ev: pd.DataFrame, my_timestamps: Dict) -> pd.DataFrame:
-    ev_temp = my_ev.loc[pd.IndexSlice[:, my_timestamps['past_from']
-        :my_timestamps['past_to']], :].copy()
+    ev_temp = my_ev.loc[pd.IndexSlice[:, my_timestamps['past_from']                                      :my_timestamps['past_to']], :].copy()
     print(ev_temp)
     return ev_temp
 
