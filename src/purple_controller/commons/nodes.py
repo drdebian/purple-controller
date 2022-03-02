@@ -65,8 +65,8 @@ def get_model_timestamps(timing: Dict) -> Dict[str, pd.Timestamp]:
     else:
         start = pd.Timestamp(timing['M_ST'])
 
-    start = start.round(str(int(60*timing['M_DT']))+'T') + \
-        pd.Timedelta(1*int(60*timing['M_DT']), 'T')
+    # + pd.Timedelta(1*int(60*timing['M_DT']), 'T')
+    start = start.round(str(int(60*timing['M_DT']))+'T')
 
     my_now = start  # + pd.Timedelta(i*int(60*c1['M_DT']), 'T')
 
@@ -100,12 +100,19 @@ def get_current_pv_data(my_pv: pd.DataFrame, my_timestamps: Dict) -> pd.DataFram
 
 def get_current_ev_data(my_ev: pd.DataFrame, my_timestamps: Dict) -> pd.DataFrame:
     my_timestamp = my_timestamps['now']
-    ev_temp = my_ev.xs(my_timestamp, level='timestamp').copy()
-    # alternative: ev_data.loc[pd.IndexSlice[:, start:start],:]
-    ev_temp['period'] = 0
-    ev_temp.reset_index(inplace=True)
-    ev_temp.set_index(['vehicle', 'period'], inplace=True)
-    print(ev_temp)
+    my_maxtimestamps = my_ev.copy()
+    my_maxtimestamps = my_maxtimestamps.reset_index(drop=False)
+    my_maxtimestamps = my_maxtimestamps.groupby('vehicle').max()
+    #my_maxtimestamps = my_maxtimestamps['vehicle', 'timestamp']
+#    my_maxtimestamps = my_maxtimestamps['vehicle', 'timestamp'].groupby('vehicle').max()
+    print(my_maxtimestamps)
+
+    # ev_temp = my_ev.xs(my_timestamp, level='timestamp').copy()
+    # # alternative: ev_data.loc[pd.IndexSlice[:, start:start],:]
+    # ev_temp['period'] = 0
+    # ev_temp.reset_index(inplace=True)
+    # ev_temp.set_index(['vehicle', 'period'], inplace=True)
+    # print(ev_temp)
     return ev_temp  # .astype(float)
 
 

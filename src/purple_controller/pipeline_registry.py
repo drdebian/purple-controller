@@ -19,7 +19,9 @@ def register_pipelines() -> Dict[str, Pipeline]:
     model_direct_pipeline = md.create_pipeline()
 
     return {
-        "__default__": data_import_pipeline+data_processing_pipeline,
+        "__default__": model_direct_pipeline
+        + data_import_pipeline
+        + data_processing_pipeline,
         "data_import": data_import_pipeline,
         "data_processing": data_processing_pipeline,
         "model_direct": model_direct_pipeline,
