@@ -30,7 +30,7 @@ def load_pv_data(data_ready: Any, raw_pv_data: pd.DataFrame, timing: Dict, const
     my_pv['PV_kW'] = my_pv['PV-W']/1000  # convert W to kW
     my_pv['BESS_kWh'] = my_pv['Kreisel-SOC']*constants['E_EL_CAP'] / \
         100  # convert BESS SOC percentage to kWh
-    my_pv = my_pv[['PV_kW', 'BESS_kWh']]
+    my_pv = my_pv[['PV_kW', 'BESS_kWh', 'cntMeasurements']]
     my_pv = my_pv.resample(str(freq)+'T').mean().pad()  # resample to hourly
 
     print(my_pv)
