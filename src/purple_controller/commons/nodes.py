@@ -14,24 +14,28 @@ log = logging.getLogger(__name__)
 # plt.style.use('ggplot')
 
 
-def load_lila_config(config_lila: Dict, config_cars: Dict) -> Dict:
+def load_lila_config(config_lila: Dict, config_cars: Dict, constants: Dict) -> Dict:
     """Function to parse original system configuration files into format suitable for use in a model
 
     Args:
         config_lila (Dict): Nested dictionary containing LiLa configuration parameters
         config_cars (Dict): Nested dictionary containing car configuration parameters
+        constants: Dictionary subsection from parameters.yaml
 
     Returns:
         Dict: Flattened dictionary containing consolidated configuration for use in model
     """
 
-    model_config = {}
+    # model_config = {}
+    model_config = constants.copy()  # use defaults from parameters.yaml
 
     model_config['E_EL_CAP'] = config_lila['LiLa']['battery']['capacity']
-    model_config['P_EL_MAX'] = config_lila['LiLa']['battery']['maxChargingPower']
-    model_config['P_EL_MIN'] = config_lila['LiLa']['battery']['maxDischargePower']
+    #model_config['P_EL_MAX'] = config_lila['LiLa']['battery']['maxChargingPower']
+    #model_config['P_EL_MIN'] = config_lila['LiLa']['battery']['maxDischargePower']
     model_config['P_PV_CAP'] = config_lila['LiLa']['pv']['maxPower']
-    model_config['P_PV_ETA'] = .6
+    # model_config['P_PV_ETA'] = constants['P_PV_ETA']
+    # model_config['P_EL_MAX'] = constants['P_EL_MAX']
+    # model_config['P_EL_MIN'] = constants['P_EL_MIN']
 
     model_config['P_CS_MAX'] = {}
     for cs in config_lila['LiLa']['chargingstations']:
@@ -132,7 +136,8 @@ def get_history_pv_data(my_pv: pd.DataFrame, my_timestamps: Dict) -> pd.DataFram
 
 
 def get_history_ev_data(my_ev: pd.DataFrame, my_timestamps: Dict) -> pd.DataFrame:
-    ev_temp = my_ev.loc[pd.IndexSlice[:, my_timestamps['past_from']:my_timestamps['past_to']], :].copy()
+    ev_temp = my_ev.loc[pd.IndexSlice[:, my_timestamps['past_from']
+        :my_timestamps['past_to']], :].copy()
 
     print(ev_temp)
     return ev_temp

@@ -13,3 +13,28 @@ solverparams:
 location:
   lat: 47.44969
   lon: 9.91852
+
+constants:
+  P_NE_MAX: 35
+  P_NE_MIN: 0
+  # E_EL_CAP: 26.56
+  # E_EL_MAX: 26.2944
+  # E_EL_MIN: 0.2656
+  # E_EL_BEG: 13.28
+  # E_EL_END: 13.28
+  P_EL_MAX: 12.78
+  P_EL_MIN: 0
+  P_EL_ETA: 0.95
+  D_EL: 0.04
+  S_EL: 0.9986666666666667
+  # E_EV_CAP: 40
+  # E_EV_MAX_PRC: 38.0
+  # E_EV_MIN_PRC: 2.0
+  # E_EV_BEG: 20.0
+  # P_EV_MAX: 22.08
+  # P_EV_MIN: 4.14
+  P_EV_ETA: 0.85
+  D_EV: 0.05
+  S_EV: 0.9983333333333333
+  # P_PV_CAP: 14.28
+  P_PV_ETA: 0.6

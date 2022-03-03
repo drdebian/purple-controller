@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 # plt.style.use('ggplot')
 
 
-def construct_model_direct(timing: Dict, constants: Dict, production_pv: pd.DataFrame, demand_ev: pd.DataFrame, soc_inits: Dict) -> pulp.LpProblem:
+def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFrame, demand_ev: pd.DataFrame) -> pulp.LpProblem:
 
     # timing and scope
     M_DT = timing["M_DT"]  # model length of period in hours
@@ -32,31 +32,32 @@ def construct_model_direct(timing: Dict, constants: Dict, production_pv: pd.Data
     # infrastructure
     # power grid
     # maximum power draw/delivery allowed from/to grid in kW
-    P_NE_MAX = constants["P_NE_MAX"]
+    P_NE_MAX = config["P_NE_MAX"]
 
     # electric storage
-    E_EL_MAX = constants["E_EL_MAX"]  # max. energy level to charge to
-    E_EL_MIN = constants["E_EL_MIN"]  # min. energy level to drain to
+    E_EL_MAX = config["E_EL_MAX"]  # max. energy level to charge to
+    E_EL_MIN = config["E_EL_MIN"]  # min. energy level to drain to
     # max. battery (dis)charging power in kW
-    P_EL_MAX = constants["P_EL_MAX"]
+    P_EL_MAX = config["P_EL_MAX"]
     # min. battery charging power in kW
-    P_EL_MIN = constants["P_EL_MIN"]
-    P_EL_ETA = constants["P_EL_ETA"]  # (dis)charging efficiency
+    P_EL_MIN = config["P_EL_MIN"]
+    P_EL_ETA = config["P_EL_ETA"]  # (dis)charging efficiency
     # self-discharge percentage of battery per day
-    S_EL = constants["S_EL"]  # discharge factor per period
+    S_EL = config["S_EL"]  # discharge factor per period
 
     # electric vehicles
-    my_vehicles = demand_ev.index.get_level_values("vehicle").unique()
+    # my_vehicles = demand_ev.index.get_level_values("vehicle").unique()
+    my_vehicles = config['vehicles']
     # EV capacity in kWh (Nissan Leaf 2016: (40) or 62 kWh)
-    E_EV_MAX = constants["E_EV_MAX"]
-    E_EV_MIN = constants["E_EV_MIN"]
+    E_EV_MAX = config["E_EV_CAP"]
+    #E_EV_MIN = constants["E_EV_MIN"]
     # max. EV charging power in kW (A*phases*V)
-    P_EV_MAX = constants["P_EV_MAX"]
+    P_EV_MAX = config["P_EV_MAX"]
     # min. EV charging power in kW (A*phases*V)
-    P_EV_MIN = constants["P_EV_MIN"]
-    P_EV_ETA = constants["P_EV_ETA"]  # EV charging efficiency
+    P_EV_MIN = config["P_EV_MIN"]
+    P_EV_ETA = config["P_EV_ETA"]  # EV charging efficiency
     # self-discharge percentage of electric vehicles per day
-    S_EV = constants["S_EV"]  # discharge factor per period
+    S_EV = config["S_EV"]  # discharge factor per period
 
     # Model creation
     model = pulp.LpProblem("BasismodellLadestation", pulp.LpMinimize)
@@ -95,6 +96,7 @@ def construct_model_direct(timing: Dict, constants: Dict, production_pv: pd.Data
         "BatterySOC", Instants, lowBound=E_EL_MIN, upBound=E_EL_MAX, cat="Continuous"
     )
 
+# TODO: indexed bounds!!
     # Electric Vehicles
     ev_in = pulp.LpVariable.dicts(
         "EVCharge",
@@ -113,7 +115,7 @@ def construct_model_direct(timing: Dict, constants: Dict, production_pv: pd.Data
     EV = pulp.LpVariable.dicts(
         "EVSOC",
         [(v, t) for v in my_vehicles for t in Instants],
-        lowBound=E_EV_MIN,
+        lowBound=0,
         upBound=E_EV_MAX,
         cat="Continuous",
     )

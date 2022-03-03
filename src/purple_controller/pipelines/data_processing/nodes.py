@@ -98,9 +98,9 @@ def load_ev_data(data_ready: Any, raw_ev_data: pd.DataFrame, config_model: Dict,
     return my_ev
 
 
-def get_ev_data(ev_data: pd.DataFrame, ev_config: Dict) -> pd.DataFrame:
+# def get_ev_data(ev_data: pd.DataFrame, ev_config: Dict) -> pd.DataFrame:
 
-    print(ev_data)
-    print(ev_config)
+#     print(ev_data)
+#     print(ev_config)
 
-    return ev_data
+#     return ev_data

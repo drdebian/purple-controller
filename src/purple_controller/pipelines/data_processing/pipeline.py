@@ -12,7 +12,7 @@ def create_pipeline(**kwargs):
     return Pipeline([
         node(
             func=load_lila_config,
-            inputs=["raw_config_lila", "raw_config_cars"],
+            inputs=["raw_config_lila", "raw_config_cars", "params:constants"],
             outputs="config_model",
             name="load_lila_config_node",
         ),
@@ -39,6 +39,7 @@ def create_pipeline(**kwargs):
             outputs="data_ready",
             name="depend_on_imported_data_node",
         ),
+
 
 
     ])
