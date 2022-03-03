@@ -156,11 +156,11 @@ cte0 as (
     group by a.TimeDate15m
 )
 select b.*,
-    LAG(b.stateOfCharge, 1, b.stateOfCharge) over (
+    b.stateOfCharge - LAG(b.stateOfCharge, 1, b.stateOfCharge) over (
         partition by b.vehicle
         order by b.vehicle,
             b.timestamp
-    ) - b.stateOfCharge as chgSOC
+    ) as chgSOC
 from cte0 b
     /* where b.timestamp >= datetime('now', '-8 days') 
      */

@@ -20,9 +20,9 @@ cte0 as (
     group by a.TimeDate15m
 )
 select b.*,
-    LAG(b.[Kreisel-SOC], 1, b.[Kreisel-SOC]) over (
+    b.[Kreisel-SOC]- LAG(b.[Kreisel-SOC], 1, b.[Kreisel-SOC]) over (
         order by b.timestamp
-    ) - b.[Kreisel-SOC] as chgSOC
+    )  as chgSOC
 from cte0 b
     /* where b.timestamp >= datetime('now', '-8 days')
      */
