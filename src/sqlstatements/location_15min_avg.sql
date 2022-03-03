@@ -13,8 +13,8 @@ cte0 as (
         round(avg([PV-W]), 0) as [PV-W],
         max([Kreisel Arbeitsmodus]) as [Kreisel Arbeitsmodus],
         round(avg(coalesce([Kreisel-Ladeleistung], 0)), 0) as [Kreisel-Ladeleistung],
-        round(avg(coalesce([Kreisel-Entladeleistung], 0), 0) as [Kreisel-Entladeleistung],
-        round(avg(coalesce([Kreisel-SOC], 0), 0) as [Kreisel-SOC],
+        round(avg(coalesce([Kreisel-Entladeleistung], 0)), 0) as [Kreisel-Entladeleistung],
+        round(avg(coalesce([Kreisel-SOC], 0)), 0) as [Kreisel-SOC],
         count(*) as cntMeasurements
     from ctea a
     group by a.TimeDate15m
