@@ -12,9 +12,9 @@ cte0 as (
     select a.TimeDate15m as [timestamp],
         round(avg([PV-W]), 0) as [PV-W],
         max([Kreisel Arbeitsmodus]) as [Kreisel Arbeitsmodus],
-        round(avg([Kreisel-Ladeleistung]), 0) as [Kreisel-Ladeleistung],
-        round(avg([Kreisel-Entladeleistung]), 0) as [Kreisel-Entladeleistung],
-        round(avg([Kreisel-SOC]), 0) as [Kreisel-SOC],
+        round(avg(coalesce([Kreisel-Ladeleistung], 0)), 0) as [Kreisel-Ladeleistung],
+        round(avg(coalesce([Kreisel-Entladeleistung], 0), 0) as [Kreisel-Entladeleistung],
+        round(avg(coalesce([Kreisel-SOC], 0), 0) as [Kreisel-SOC],
         count(*) as cntMeasurements
     from ctea a
     group by a.TimeDate15m
