@@ -46,7 +46,7 @@ def load_ev_data(data_ready: Any, raw_ev_data: pd.DataFrame, config_model: Dict,
     for v in my_vehicles:
         my_vehicle = raw_ev_data.copy().loc[pd.IndexSlice[v, :], :]
 
-        #my_vehicle['status'] = 'ride'
+        # my_vehicle['status'] = 'ride'
 
         my_vehicle.reset_index(inplace=True, drop=False)
         my_vehicle.timestamp = pd.to_datetime(my_vehicle.timestamp)
@@ -70,7 +70,9 @@ def load_ev_data(data_ready: Any, raw_ev_data: pd.DataFrame, config_model: Dict,
 
         my_vehicle['SOC_kWh'] = my_vehicle['stateOfCharge'] * \
             config_model['E_EV_CAP'][v]/100
-        my_vehicle['power'] = my_vehicle['chgSOC'] * config_model['E_EV_CAP'][v]/100
+
+        my_vehicle['power'] = np.maximum(-my_vehicle['chgSOC'], 0) * \
+            config_model['E_EV_CAP'][v]/100
 
         my_vehicle.reset_index(inplace=True, drop=False)
         my_vehicle.set_index(['vehicle', 'timestamp'], inplace=True)

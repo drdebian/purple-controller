@@ -100,15 +100,27 @@ def get_current_pv_data(my_pv: pd.DataFrame, my_timestamps: Dict) -> pd.DataFram
 
 def get_current_ev_data(my_ev: pd.DataFrame, my_timestamps: Dict) -> pd.DataFrame:
     #my_timestamp = my_timestamps['now']
+    # ^^^^ this has to be ignored due to the possibility of data gaps
+    # ^^^^ as a consequence, the last record is being used for "now"
+
     ev_temp = my_ev.copy()
     ev_temp = ev_temp.reset_index(drop=False)
     ev_temp = ev_temp.groupby('vehicle').max()
     ev_temp.reset_index(inplace=True, drop=False)
+
+    ev_max_index = list(zip(ev_temp.vehicle, ev_temp.timestamp))
+    my_index = pd.MultiIndex.from_tuples(ev_max_index)
+
     # ev_temp = my_ev.xs(my_timestamp, level='timestamp').copy()
     # # alternative: ev_data.loc[pd.IndexSlice[:, start:start],:]
+
+    ev_temp = my_ev.copy()
+    ev_temp = ev_temp.loc[my_index, :]
+    ev_temp.reset_index(inplace=True, drop=False)
     ev_temp['period'] = 0
-    ev_temp.drop(['timestamp', 'status'], axis=1, inplace=True)
+    ev_temp.drop(['timestamp'], axis=1, inplace=True)
     ev_temp.set_index(['vehicle', 'period'], inplace=True)
+
     print(ev_temp)
     return ev_temp  # .astype(float)
 
@@ -120,7 +132,8 @@ def get_history_pv_data(my_pv: pd.DataFrame, my_timestamps: Dict) -> pd.DataFram
 
 
 def get_history_ev_data(my_ev: pd.DataFrame, my_timestamps: Dict) -> pd.DataFrame:
-    ev_temp = my_ev.loc[pd.IndexSlice[:, my_timestamps['past_from']                                      :my_timestamps['past_to']], :].copy()
+    ev_temp = my_ev.loc[pd.IndexSlice[:, my_timestamps['past_from']:my_timestamps['past_to']], :].copy()
+
     print(ev_temp)
     return ev_temp
 
@@ -183,6 +196,10 @@ def get_model_ev_data(my_current_ev: pd.DataFrame, my_predicted_ev: pd.DataFrame
     ev_temp['loadbeg'] = False
     ev_temp.loc[(ev_temp.loadable > ev_temp.loadable.shift(-1)) &
                 (ev_temp.index.get_level_values('period') < max(ev_temp.index.get_level_values('period'))-1), 'loadbeg'] = True
+
+    my_columns = ['SOC_kWh', 'power', 'driving',
+                  'loadable', 'loadend', 'driveend', 'loadbeg']
+    ev_temp = ev_temp[my_columns]
 
     print(ev_temp)
     return ev_temp
