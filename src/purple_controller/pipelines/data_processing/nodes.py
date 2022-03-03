@@ -41,10 +41,13 @@ def load_ev_data(data_ready: Any, raw_ev_data: pd.DataFrame, config_model: Dict,
 
     my_vehicles = config_model['vehicles']
     freq = int(60*timing['M_DT'])
+    numcolumns = ['']
 
     appended_data = []
     for v in my_vehicles:
         my_vehicle = raw_ev_data.copy().loc[pd.IndexSlice[v, :], :]
+
+        my_vehicle.status = my_vehicle.status.fillna('idle')
 
         # my_vehicle['status'] = 'ride'
 

@@ -69,13 +69,13 @@ cte0 as (
         a.TimeDate15m as [timestamp],
         max([id]) as [id],
         max([status]) as [status],
-        round(avg([positionLat]), 5) as [positionLat],
-        round(avg([positionLon]), 5) as [positionLon],
-        round(avg([distanceLastCharge]), 0) as [distanceLastCharge],
-        round(avg([avgSpeedLastCharge]), 0) as [avgSpeedLastCharge],
-        round(avg([stateOfCharge]), 0) as [stateOfCharge],
-        round(avg([remainingRange]), 0) as [remainingRange],
-        round(avg([remainingEnergy]), 0) as [remainingEnergy],
+        round(avg(coalesce([positionLat], 0)), 5) as [positionLat],
+        round(avg(coalesce([positionLon], 0)), 5) as [positionLon],
+        round(avg(coalesce([distanceLastCharge], 0)), 0) as [distanceLastCharge],
+        round(avg(coalesce([avgSpeedLastCharge], 0)), 0) as [avgSpeedLastCharge],
+        round(avg(coalesce([stateOfCharge], 0)), 0) as [stateOfCharge],
+        round(avg(coalesce([remainingRange], 0)), 0) as [remainingRange],
+        round(avg(coalesce([remainingEnergy], 0)), 0) as [remainingEnergy],
         count(*) as cntMeasurements
     from ctea1 a
     group by a.TimeDate15m
@@ -84,14 +84,13 @@ cte0 as (
         a.TimeDate15m as [timestamp],
         max([id]) as [id],
         max([status]) as [status],
-        round(avg([positionLat]), 5) as [positionLat],
-        round(avg([positionLon]), 5) as [positionLon],
-        round(avg([distanceLastCharge]), 0) as [distanceLastCharge],
-        round(avg([avgSpeedLastCharge]), 0) as [avgSpeedLastCharge],
-        round(avg([stateOfCharge]), 0) as [stateOfCharge],
-        round(avg([remainingRange]), 0) as [remainingRange],
-        round(avg([remainingEnergy]), 0) as [remainingEnergy],
-        count(*) as cntMeasurements
+        round(avg(coalesce([positionLat], 0)), 5) as [positionLat],
+        round(avg(coalesce([positionLon], 0)), 5) as [positionLon],
+        round(avg(coalesce([distanceLastCharge], 0)), 0) as [distanceLastCharge],
+        round(avg(coalesce([avgSpeedLastCharge], 0)), 0) as [avgSpeedLastCharge],
+        round(avg(coalesce([stateOfCharge], 0)), 0) as [stateOfCharge],
+        round(avg(coalesce([remainingRange], 0)), 0) as [remainingRange],
+        round(avg(coalesce([remainingEnergy], 0)), 0) as [remainingEnergy],        count(*) as cntMeasurements
     from ctea2 a
     group by a.TimeDate15m
     union
@@ -99,13 +98,13 @@ cte0 as (
         a.TimeDate15m as [timestamp],
         max([id]) as [id],
         max([status]) as [status],
-        round(avg([positionLat]), 5) as [positionLat],
-        round(avg([positionLon]), 5) as [positionLon],
-        round(avg([distanceLastCharge]), 0) as [distanceLastCharge],
-        round(avg([avgSpeedLastCharge]), 0) as [avgSpeedLastCharge],
-        round(avg([stateOfCharge]), 0) as [stateOfCharge],
-        round(avg([remainingRange]), 0) as [remainingRange],
-        round(avg([remainingEnergy]), 0) as [remainingEnergy],
+        round(avg(coalesce([positionLat], 0)), 5) as [positionLat],
+        round(avg(coalesce([positionLon], 0)), 5) as [positionLon],
+        round(avg(coalesce([distanceLastCharge], 0)), 0) as [distanceLastCharge],
+        round(avg(coalesce([avgSpeedLastCharge], 0)), 0) as [avgSpeedLastCharge],
+        round(avg(coalesce([stateOfCharge], 0)), 0) as [stateOfCharge],
+        round(avg(coalesce([remainingRange], 0)), 0) as [remainingRange],
+        round(avg(coalesce([remainingEnergy], 0)), 0) as [remainingEnergy],
         count(*) as cntMeasurements
     from ctea3 a
     group by a.TimeDate15m
@@ -114,14 +113,13 @@ cte0 as (
         a.TimeDate15m as [timestamp],
         max([id]) as [id],
         max([status]) as [status],
-        round(avg([positionLat]), 5) as [positionLat],
-        round(avg([positionLon]), 5) as [positionLon],
-        round(avg([distanceLastCharge]), 0) as [distanceLastCharge],
-        round(avg([avgSpeedLastCharge]), 0) as [avgSpeedLastCharge],
-        round(avg([stateOfCharge]), 0) as [stateOfCharge],
-        round(avg([remainingRange]), 0) as [remainingRange],
-        round(avg([remainingEnergy]), 0) as [remainingEnergy],
-        count(*) as cntMeasurements
+        round(avg(coalesce([positionLat], 0)), 5) as [positionLat],
+        round(avg(coalesce([positionLon], 0)), 5) as [positionLon],
+        round(avg(coalesce([distanceLastCharge], 0)), 0) as [distanceLastCharge],
+        round(avg(coalesce([avgSpeedLastCharge], 0)), 0) as [avgSpeedLastCharge],
+        round(avg(coalesce([stateOfCharge], 0)), 0) as [stateOfCharge],
+        round(avg(coalesce([remainingRange], 0)), 0) as [remainingRange],
+        round(avg(coalesce([remainingEnergy], 0)), 0) as [remainingEnergy],        count(*) as cntMeasurements
     from ctea4 a
     group by a.TimeDate15m
     union
@@ -129,14 +127,13 @@ cte0 as (
         a.TimeDate15m as [timestamp],
         max([id]) as [id],
         max([status]) as [status],
-        round(avg([positionLat]), 5) as [positionLat],
-        round(avg([positionLon]), 5) as [positionLon],
-        round(avg([distanceLastCharge]), 0) as [distanceLastCharge],
-        round(avg([avgSpeedLastCharge]), 0) as [avgSpeedLastCharge],
-        round(avg([stateOfCharge]), 0) as [stateOfCharge],
-        round(avg([remainingRange]), 0) as [remainingRange],
-        round(avg([remainingEnergy]), 0) as [remainingEnergy],
-        count(*) as cntMeasurements
+        round(avg(coalesce([positionLat], 0)), 5) as [positionLat],
+        round(avg(coalesce([positionLon], 0)), 5) as [positionLon],
+        round(avg(coalesce([distanceLastCharge], 0)), 0) as [distanceLastCharge],
+        round(avg(coalesce([avgSpeedLastCharge], 0)), 0) as [avgSpeedLastCharge],
+        round(avg(coalesce([stateOfCharge], 0)), 0) as [stateOfCharge],
+        round(avg(coalesce([remainingRange], 0)), 0) as [remainingRange],
+        round(avg(coalesce([remainingEnergy], 0)), 0) as [remainingEnergy],        count(*) as cntMeasurements
     from ctea5 a
     group by a.TimeDate15m
     union
@@ -144,14 +141,13 @@ cte0 as (
         a.TimeDate15m as [timestamp],
         max([id]) as [id],
         max([status]) as [status],
-        round(avg([positionLat]), 5) as [positionLat],
-        round(avg([positionLon]), 5) as [positionLon],
-        round(avg([distanceLastCharge]), 0) as [distanceLastCharge],
-        round(avg([avgSpeedLastCharge]), 0) as [avgSpeedLastCharge],
-        round(avg([stateOfCharge]), 0) as [stateOfCharge],
-        round(avg([remainingRange]), 0) as [remainingRange],
-        round(avg([remainingEnergy]), 0) as [remainingEnergy],
-        count(*) as cntMeasurements
+        round(avg(coalesce([positionLat], 0)), 5) as [positionLat],
+        round(avg(coalesce([positionLon], 0)), 5) as [positionLon],
+        round(avg(coalesce([distanceLastCharge], 0)), 0) as [distanceLastCharge],
+        round(avg(coalesce([avgSpeedLastCharge], 0)), 0) as [avgSpeedLastCharge],
+        round(avg(coalesce([stateOfCharge], 0)), 0) as [stateOfCharge],
+        round(avg(coalesce([remainingRange], 0)), 0) as [remainingRange],
+        round(avg(coalesce([remainingEnergy], 0)), 0) as [remainingEnergy],        count(*) as cntMeasurements
     from ctea6 a
     group by a.TimeDate15m
 )
