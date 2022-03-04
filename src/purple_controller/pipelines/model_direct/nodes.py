@@ -14,10 +14,16 @@ log = logging.getLogger(__name__)
 def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFrame, demand_ev: pd.DataFrame) -> pulp.LpProblem:
 
     print("model config: ", config)
+    print(production_pv)
+    print(demand_ev.loc['car1', :])
+
+    my_vehicles = ['car1']  # config['vehicles']
 
     # timing and scope
     M_DT = timing["M_DT"]  # model length of period in hours
+    assert 0 < M_DT <= 1
     M_LA = timing["M_LA"]  # model lookahead number of periods
+    assert M_LA > 1
 
     # Time
     T = int(round(M_LA/M_DT, 0))
@@ -30,21 +36,26 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
     # power grid
     # maximum power draw/delivery allowed from/to grid in kW
     P_NE_MAX = config["P_NE_MAX"]
+    assert P_NE_MAX > 0
 
     # electric storage
     E_EL_MAX = config["E_EL_CAP"]  # max. energy level to charge to
+    assert E_EL_MAX > 0
     # E_EL_MIN = config["E_EL_MIN"]  # min. energy level to drain to
     # max. battery (dis)charging power in kW
     P_EL_MAX = config["P_EL_MAX"]
+    assert P_EL_MAX > 0
     # min. battery charging power in kW
     P_EL_MIN = config["P_EL_MIN"]
+    assert P_EL_MIN <= P_EL_MAX
     P_EL_ETA = config["P_EL_ETA"]  # (dis)charging efficiency
+    assert 0 < P_EL_ETA <= 1
     # self-discharge percentage of battery per day
     S_EL = config["S_EL"]  # discharge factor per period
+    assert 0 <= S_EL <= 1
 
     # electric vehicles
     # my_vehicles = demand_ev.index.get_level_values("vehicle").unique()
-    my_vehicles = config['vehicles']
     # EV capacity in kWh (Nissan Leaf 2016: (40) or 62 kWh)
     E_EV_MAX = config["E_EV_CAP"]
     #E_EV_MIN = constants["E_EV_MIN"]
@@ -53,8 +64,10 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
     # min. EV charging power in kW (A*phases*V)
     P_EV_MIN = config["P_EV_MIN"]
     P_EV_ETA = config["P_EV_ETA"]  # EV charging efficiency
+    assert 0 < P_EV_ETA <= 1
     # self-discharge percentage of electric vehicles per day
     S_EV = config["S_EV"]  # discharge factor per period
+    assert 0 <= S_EV <= 1
 
     # Model creation
     model = pulp.LpProblem("BasismodellLadestation", pulp.LpMinimize)
@@ -98,7 +111,7 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
     ev_in = pulp.LpVariable.dicts(
         "EVCharge",
         [(v, t) for v in my_vehicles for t in Periods],
-        # lowBound=0,
+        lowBound=0,
         # upBound=P_EV_MAX,
         cat="Continuous",
     )
@@ -117,7 +130,7 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
     EV = pulp.LpVariable.dicts(
         "EVSOC",
         [(v, t) for v in my_vehicles for t in Instants],
-        # lowBound=0,
+        lowBound=0,
         # upBound=E_EV_MAX,
         cat="Continuous",
     )
@@ -140,7 +153,8 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
     # Zielfunktion
     ###############
 
-    model += pulp.lpSum([n_out[t]*t for t in Periods]) + (1/T)*pulp.lpSum(n_out)
+    #model += pulp.lpSum([n_out[t]*t for t in Periods]) + (1/T)*pulp.lpSum(n_out)
+    model += pulp.lpSum(n_out)
 
     ###############
     # Constraints
@@ -173,9 +187,7 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
         # don't discharge battery to grid
         model += n_in_act[t] + b_out_act[t] <= 1
         # allow battery charging if pv production is greater than zero
-        #model += b_in_act[t] <= production_pv.PV_kW[t]
-        model += b_out_act[t] >= 1 - production_pv.PV_kW[t]
-        #model += n_out_act[t] + b_out_act[t] <= 1
+        ##model += b_out_act[t] >= 1 - production_pv.PV_kW[t]
 
         # sum up all load coming from electric vehicles
         model += ev_in_tot[t] == pulp.lpSum([ev_in[(v, t)]
@@ -215,17 +227,19 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
 
     # initial conditions
     # model += B[0] == B[T]  # E_EL_CAP*.1 #E_EL_BEG
-    # model += B[0] == production_pv.BESS_kWh[0]  # soc_inits['BESS']  # E_EL_BEG
+    model += B[0] == production_pv.BESS_kWh[0]  # soc_inits['BESS']  # E_EL_BEG
+    ##model += B[0] == 10
 
     for v in my_vehicles:
         # soc_inits[v]  # demand_ev.EVSOC.loc[v, 0]
-        #model += EV[(v, 0)] == demand_ev.SOC_kWh.loc[v, 0]
+        model += EV[(v, 0)] == demand_ev.SOC_kWh.loc[v, 0]
+        # model += EV[(v, 0)] == 10  # demand_ev.SOC_kWh.loc[v, 0]
         # model += EV[(v, 0)] <= EV[(v, T)]
         # model += EV[(v, 0)] >= EV[(v, T)] - P_EV_MIN * M_DT
 
         # model += EV[(v, 0)] == EV[(v, T)] + \
         #     EV_under[(v, T)] - EV_over[(v, T)]
-        pass
+        # pass
 
         # calculate PV KPIs
     model += wPro == pulp.lpSum(production_pv.PV_kW)

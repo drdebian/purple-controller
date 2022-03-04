@@ -280,6 +280,7 @@ def solve_model(model: pulp.LpProblem, solverparams: Dict) -> pulp.LpProblem:
 
     if result != 1:
         log.error('Model could not be solved!!')
+        # print(model)
 
     return model
 
