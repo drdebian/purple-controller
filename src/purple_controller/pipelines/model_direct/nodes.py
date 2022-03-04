@@ -3,11 +3,6 @@ This is a boilerplate pipeline 'model_direct'
 generated using Kedro 0.17.6
 """
 
-"""
-This is a boilerplate pipeline 'model_pred'
-generated using Kedro 0.17.6
-"""
-
 from typing import Dict, Callable, Any
 import pandas as pd
 import pulp
@@ -35,8 +30,8 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
     P_NE_MAX = config["P_NE_MAX"]
 
     # electric storage
-    E_EL_MAX = config["E_EL_MAX"]  # max. energy level to charge to
-    E_EL_MIN = config["E_EL_MIN"]  # min. energy level to drain to
+    E_EL_MAX = config["E_EL_CAP"]  # max. energy level to charge to
+    # E_EL_MIN = config["E_EL_MIN"]  # min. energy level to drain to
     # max. battery (dis)charging power in kW
     P_EL_MAX = config["P_EL_MAX"]
     # min. battery charging power in kW
@@ -93,7 +88,7 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
         "BatteryDischargeActive", Periods, cat="Binary")
 
     B = pulp.LpVariable.dicts(
-        "BatterySOC", Instants, lowBound=E_EL_MIN, upBound=E_EL_MAX, cat="Continuous"
+        "BatterySOC", Instants, lowBound=0, upBound=E_EL_MAX, cat="Continuous"
     )
 
 # TODO: indexed bounds!!
@@ -101,10 +96,15 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
     ev_in = pulp.LpVariable.dicts(
         "EVCharge",
         [(v, t) for v in my_vehicles for t in Periods],
-        lowBound=0,
-        upBound=P_EV_MAX,
+        # lowBound=0,
+        # upBound=P_EV_MAX,
         cat="Continuous",
     )
+    for v in my_vehicles:
+        for t in Periods:
+            ev_in[(v, t)].lowBound = 0
+            ev_in[(v, t)].upBound = P_EV_MAX[v]
+
     ev_in_act = pulp.LpVariable.dicts(
         "EVChargeActive", [(v, t) for v in my_vehicles for t in Periods], cat="Binary"
     )
@@ -115,10 +115,14 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
     EV = pulp.LpVariable.dicts(
         "EVSOC",
         [(v, t) for v in my_vehicles for t in Instants],
-        lowBound=0,
-        upBound=E_EV_MAX,
+        # lowBound=0,
+        # upBound=E_EV_MAX,
         cat="Continuous",
     )
+    for v in my_vehicles:
+        for t in Instants:
+            EV[(v, t)].lowBound = 0
+            EV[(v, t)].upBound = E_EV_MAX[v]
 
     # helper variables for PV KPI calculation
     wPro = pulp.LpVariable("PVProducedTotal", lowBound=0, cat="Continuous")
@@ -195,24 +199,25 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
             # min./max. ev charging power
             model += (
                 ev_in[(v, t)]
-                >= ev_in_act[(v, t)] * demand_ev.loadable.loc[v, t] * P_EV_MIN
+                >= ev_in_act[(v, t)] * demand_ev.loadable.loc[v, t] * P_EV_MIN[v]
             )
             model += (
                 ev_in[(v, t)]
-                <= ev_in_act[(v, t)] * demand_ev.loadable.loc[v, t] * P_EV_MAX
+                <= ev_in_act[(v, t)] * demand_ev.loadable.loc[v, t] * P_EV_MAX[v]
             )
             model += ev_in_act[(v, t)] >= 0
             model += ev_in_act[(v, t)] <= 1
 
             # trickle charge to 80% as soon as plugged in as default
-            model += ev_in_act[(v, t)] >= .8 - EV[(v, t)]*(1/E_EV_MAX)
+            model += ev_in_act[(v, t)] >= .8 - EV[(v, t)]*(1/E_EV_MAX[v])
 
     # initial conditions
     # model += B[0] == B[T]  # E_EL_CAP*.1 #E_EL_BEG
-    model += B[0] == soc_inits['BESS']  # E_EL_BEG
+    model += B[0] == production_pv.BESS_kWh[0]  # soc_inits['BESS']  # E_EL_BEG
 
     for v in my_vehicles:
-        model += EV[(v, 0)] == soc_inits[v]  # demand_ev.EVSOC.loc[v, 0]
+        # soc_inits[v]  # demand_ev.EVSOC.loc[v, 0]
+        model += EV[(v, 0)] == demand_ev.SOC_kWh.loc[v, 0]
         # model += EV[(v, 0)] <= EV[(v, T)]
         # model += EV[(v, 0)] >= EV[(v, T)] - P_EV_MIN * M_DT
 
