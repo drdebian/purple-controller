@@ -13,6 +13,8 @@ log = logging.getLogger(__name__)
 
 def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFrame, demand_ev: pd.DataFrame) -> pulp.LpProblem:
 
+    print("model config: ", config)
+
     # timing and scope
     M_DT = timing["M_DT"]  # model length of period in hours
     M_LA = timing["M_LA"]  # model lookahead number of periods
@@ -100,10 +102,10 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
         # upBound=P_EV_MAX,
         cat="Continuous",
     )
-    for v in my_vehicles:
-        for t in Periods:
-            ev_in[(v, t)].lowBound = 0
-            ev_in[(v, t)].upBound = P_EV_MAX[v]
+    # for v in my_vehicles:
+    #     for t in Periods:
+    #         ev_in[(v, t)].lowBound = 0
+    #         ev_in[(v, t)].upBound = P_EV_MAX[v]
 
     ev_in_act = pulp.LpVariable.dicts(
         "EVChargeActive", [(v, t) for v in my_vehicles for t in Periods], cat="Binary"
@@ -119,10 +121,10 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
         # upBound=E_EV_MAX,
         cat="Continuous",
     )
-    for v in my_vehicles:
-        for t in Instants:
-            EV[(v, t)].lowBound = 0
-            EV[(v, t)].upBound = E_EV_MAX[v]
+    # for v in my_vehicles:
+    #     for t in Instants:
+    #         EV[(v, t)].lowBound = 0
+    #         EV[(v, t)].upBound = E_EV_MAX[v]
 
     # helper variables for PV KPI calculation
     wPro = pulp.LpVariable("PVProducedTotal", lowBound=0, cat="Continuous")
@@ -213,18 +215,19 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
 
     # initial conditions
     # model += B[0] == B[T]  # E_EL_CAP*.1 #E_EL_BEG
-    model += B[0] == production_pv.BESS_kWh[0]  # soc_inits['BESS']  # E_EL_BEG
+    # model += B[0] == production_pv.BESS_kWh[0]  # soc_inits['BESS']  # E_EL_BEG
 
     for v in my_vehicles:
         # soc_inits[v]  # demand_ev.EVSOC.loc[v, 0]
-        model += EV[(v, 0)] == demand_ev.SOC_kWh.loc[v, 0]
+        #model += EV[(v, 0)] == demand_ev.SOC_kWh.loc[v, 0]
         # model += EV[(v, 0)] <= EV[(v, T)]
         # model += EV[(v, 0)] >= EV[(v, T)] - P_EV_MIN * M_DT
 
         # model += EV[(v, 0)] == EV[(v, T)] + \
         #     EV_under[(v, T)] - EV_over[(v, T)]
+        pass
 
-    # calculate PV KPIs
+        # calculate PV KPIs
     model += wPro == pulp.lpSum(production_pv.PV_kW)
     model += wVer == pulp.lpSum(ev_in_tot)
     model += wBez == pulp.lpSum(n_out)
