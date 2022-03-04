@@ -69,6 +69,12 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
     S_EV = config["S_EV"]  # discharge factor per period
     assert 0 <= S_EV <= 1
 
+    # demand and production
+    assert demand_ev.power.min() >= 0
+    assert demand_ev.SOC_kWh.min() >= 0
+    assert production_pv.PV_kW.min() >= 0
+    assert production_pv.BESS_kWh.min() >= 0
+
     # Model creation
     model = pulp.LpProblem("BasismodellLadestation", pulp.LpMinimize)
 
@@ -152,8 +158,10 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
     # Zielfunktion
     ###############
 
-    model += pulp.lpSum([n_out[t]*t for t in Periods]) + (1/T)*pulp.lpSum(n_out)
+    #model += pulp.lpSum([n_out[t]*t for t in Periods]) + (1/T)*pulp.lpSum(n_out)
     #model += pulp.lpSum(n_out)
+    # model += pulp.lpSum([n_out[t]*t for t in Periods])
+    model += pulp.lpSum([-EV[(v, T)] for v in my_vehicles])
 
     ###############
     # Constraints
@@ -222,7 +230,7 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
             model += ev_in_act[(v, t)] <= 1
 
             # trickle charge to 80% as soon as plugged in as default
-            model += ev_in_act[(v, t)] >= .8 - EV[(v, t)]*(1/E_EV_MAX[v])
+            #model += ev_in_act[(v, t)] >= .8 - EV[(v, t)]*(1/E_EV_MAX[v])
 
     # initial conditions
     # model += B[0] == B[T]  # E_EL_CAP*.1 #E_EL_BEG
@@ -231,7 +239,11 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
 
     for v in my_vehicles:
         # soc_inits[v]  # demand_ev.EVSOC.loc[v, 0]
-        model += EV[(v, 0)] == demand_ev.SOC_kWh.loc[v, 0]
+        if demand_ev.SOC_kWh.loc[v, 0] > 0:  # only use initial values if non-zero
+            model += EV[(v, 0)] == demand_ev.SOC_kWh.loc[v, 0]
+        else:  # total discharge unlikely, assuming 50% charge instead to retain feasibility
+            model += EV[(v, 0)] == E_EV_MAX[v]*.5
+
         # model += EV[(v, 0)] == 10  # demand_ev.SOC_kWh.loc[v, 0]
         # model += EV[(v, 0)] <= EV[(v, T)]
         # model += EV[(v, 0)] >= EV[(v, T)] - P_EV_MIN * M_DT
