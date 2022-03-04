@@ -8,16 +8,16 @@ import pandas as pd
 import pulp
 import logging
 log = logging.getLogger(__name__)
-# plt.style.use('ggplot')
 
 
 def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFrame, demand_ev: pd.DataFrame) -> pulp.LpProblem:
 
     print("model config: ", config)
     print(production_pv)
-    print(demand_ev.loc['car1', :])
+    print(demand_ev)
 
-    my_vehicles = ['car1']  # config['vehicles']
+    # my_vehicles = ['car1']  # config['vehicles']
+    my_vehicles = config['vehicles']
 
     # timing and scope
     M_DT = timing["M_DT"]  # model length of period in hours
@@ -106,19 +106,18 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
         "BatterySOC", Instants, lowBound=0, upBound=E_EL_MAX, cat="Continuous"
     )
 
-# TODO: indexed bounds!!
     # Electric Vehicles
     ev_in = pulp.LpVariable.dicts(
         "EVCharge",
         [(v, t) for v in my_vehicles for t in Periods],
-        lowBound=0,
+        # lowBound=0,
         # upBound=P_EV_MAX,
         cat="Continuous",
     )
-    # for v in my_vehicles:
-    #     for t in Periods:
-    #         ev_in[(v, t)].lowBound = 0
-    #         ev_in[(v, t)].upBound = P_EV_MAX[v]
+    for v in my_vehicles:
+        for t in Periods:
+            ev_in[(v, t)].lowBound = 0
+            ev_in[(v, t)].upBound = P_EV_MAX[v]
 
     ev_in_act = pulp.LpVariable.dicts(
         "EVChargeActive", [(v, t) for v in my_vehicles for t in Periods], cat="Binary"
@@ -130,14 +129,14 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
     EV = pulp.LpVariable.dicts(
         "EVSOC",
         [(v, t) for v in my_vehicles for t in Instants],
-        lowBound=0,
+        # lowBound=0,
         # upBound=E_EV_MAX,
         cat="Continuous",
     )
-    # for v in my_vehicles:
-    #     for t in Instants:
-    #         EV[(v, t)].lowBound = 0
-    #         EV[(v, t)].upBound = E_EV_MAX[v]
+    for v in my_vehicles:
+        for t in Instants:
+            EV[(v, t)].lowBound = 0
+            EV[(v, t)].upBound = E_EV_MAX[v]
 
     # helper variables for PV KPI calculation
     wPro = pulp.LpVariable("PVProducedTotal", lowBound=0, cat="Continuous")
@@ -153,8 +152,8 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
     # Zielfunktion
     ###############
 
-    #model += pulp.lpSum([n_out[t]*t for t in Periods]) + (1/T)*pulp.lpSum(n_out)
-    model += pulp.lpSum(n_out)
+    model += pulp.lpSum([n_out[t]*t for t in Periods]) + (1/T)*pulp.lpSum(n_out)
+    #model += pulp.lpSum(n_out)
 
     ###############
     # Constraints
