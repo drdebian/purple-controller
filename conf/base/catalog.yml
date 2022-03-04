@@ -246,7 +246,13 @@ direct_solution_plot:
   layer: reporting
 
 
+# ev_charge_limits:
+#   type: pandas.JSONDataSet
+#   filepath: data/07_model_output/ev_charge_limits.json
+#   layer: model_output
+
 ev_charge_limits:
   type: pandas.JSONDataSet
-  filepath: data/07_model_output/ev_charge_limits.json
+  filepath: sftp:///var/local/NodeRed/commands/car_charge_limits.json
+  credentials: my_remotessh_creds
   layer: model_output

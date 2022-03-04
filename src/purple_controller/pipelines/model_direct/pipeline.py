@@ -84,10 +84,10 @@ def create_pipeline(**kwargs):
                  outputs="direct_solution_plot",
                  name="plot_direct_solution_node",
                  ),
-            # node(func=get_ev_charge_limits,
-            #      inputs="direct_solution_dictionary",
-            #      outputs="ev_charge_limits",
-            #      name="get_ev_charge_limits_node",
-            #      ),
+            node(func=get_ev_charge_limits,
+                 inputs="direct_solution_dictionary",
+                 outputs="ev_charge_limits",
+                 name="get_ev_charge_limits_node",
+                 ),
 
         ])

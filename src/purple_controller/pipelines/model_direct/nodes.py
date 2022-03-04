@@ -158,10 +158,10 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
     # Zielfunktion
     ###############
 
-    #model += pulp.lpSum([n_out[t]*t for t in Periods]) + (1/T)*pulp.lpSum(n_out)
+    model += pulp.lpSum([n_out[t]*t for t in Periods]) + (1/T)*pulp.lpSum(n_out)
     #model += pulp.lpSum(n_out)
     # model += pulp.lpSum([n_out[t]*t for t in Periods])
-    model += pulp.lpSum([-EV[(v, T)] for v in my_vehicles])
+    #model += pulp.lpSum([-EV[(v, T)]*(1/E_EV_MAX[v]) for v in my_vehicles])
 
     ###############
     # Constraints
@@ -230,7 +230,7 @@ def construct_model_direct(timing: Dict, config: Dict, production_pv: pd.DataFra
             model += ev_in_act[(v, t)] <= 1
 
             # trickle charge to 80% as soon as plugged in as default
-            #model += ev_in_act[(v, t)] >= .8 - EV[(v, t)]*(1/E_EV_MAX[v])
+            model += ev_in_act[(v, t)] >= .8 - EV[(v, t)]*(1/E_EV_MAX[v])
 
     # initial conditions
     # model += B[0] == B[T]  # E_EL_CAP*.1 #E_EL_BEG
