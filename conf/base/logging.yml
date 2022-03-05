@@ -40,6 +40,17 @@ handlers:
         base_dir: logs/journals
         formatter: json_formatter
 
+    # custom entry to handle computation log entries
+    purple_computations_handler:
+        class: logging.handlers.RotatingFileHandler
+        level: INFO
+        formatter: simple
+        filename: logs/computations.log
+        maxBytes: 10485760 # 10MB
+        backupCount: 20
+        encoding: utf8
+        delay: True
+
 loggers:
     anyconfig:
         level: WARNING
@@ -59,6 +70,12 @@ loggers:
     kedro.journal:
         level: INFO
         handlers: [journal_file_handler]
+        propagate: no
+
+    # custom entry to log computation times
+    purple.computation:
+        level: INFO
+        handlers: [console, purple_computations_handler]
         propagate: no
 
 root:
