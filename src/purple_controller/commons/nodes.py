@@ -9,9 +9,12 @@ import pulp
 import matplotlib.pyplot as plt
 from matplotlib.offsetbox import AnchoredText
 import logging
+import time
+
+from sqlalchemy import DDL
 
 log = logging.getLogger(__name__)
-# plt.style.use('ggplot')
+computation_log = logging.getLogger("purple.computation")
 
 
 def load_lila_config(config_lila: Dict, config_cars: Dict, constants: Dict) -> Dict:
@@ -259,27 +262,35 @@ def get_model_ev_scenarios(current_ev: pd.DataFrame, scenarios_ev: pd.DataFrame)
     return ev_temp
 
 
-def get_model_soc_inits(constants: Dict, my_current_ev: pd.DataFrame) -> Dict[str, float]:
+# def get_model_soc_inits(constants: Dict, my_current_ev: pd.DataFrame) -> Dict[str, float]:
 
-    my_soc_inits = {}
+#     my_soc_inits = {}
 
-    my_vehicles = list(my_current_ev.index.get_level_values('vehicle').unique())
-    for v in my_vehicles:
-        my_soc_inits[v] = constants['E_EV_BEG']
+#     my_vehicles = list(my_current_ev.index.get_level_values('vehicle').unique())
+#     for v in my_vehicles:
+#         my_soc_inits[v] = constants['E_EV_BEG']
 
-    my_soc_inits['BESS'] = constants['E_EL_BEG']
+#     my_soc_inits['BESS'] = constants['E_EL_BEG']
 
-    print(my_soc_inits)
-    return my_soc_inits
+#     print(my_soc_inits)
+#     return my_soc_inits
 
 
 def solve_model(model: pulp.LpProblem, solverparams: Dict) -> pulp.LpProblem:
+
+    tic = time.perf_counter()
+
     solver = pulp.PULP_CBC_CMD(
         gapRel=solverparams['gap_relative'],
         gapAbs=solverparams['gap_absolute'],
         timeLimit=solverparams['timelimit'],
     )
     result = model.solve(solver)
+
+    toc = time.perf_counter()
+    computation_log.info(
+        f"Model: Direct Charging. Solution time: {toc - tic:0.3f} seconds.")
+
     log.info('Model solving state: ' + str(result))
 
     if result != 1:
@@ -340,6 +351,13 @@ def extract_model_solution_dataframes(model: pulp.LpProblem) -> Dict:
         result['result3'] = result3.sort_index().copy()
 
     return result
+
+
+def store_model_solution_dataframes(solution: Dict) -> Dict:
+
+    # dummy node to store versioned solutions
+
+    return solution
 
 
 def plot_sys_timeseries_simple(result: Dict, prodpv: pd.DataFrame, demandev: pd.DataFrame) -> plt.figure:
