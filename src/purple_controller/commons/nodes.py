@@ -96,7 +96,11 @@ def show_model_timestamps(timestamps: Dict):
 
 def get_current_pv_data(my_pv: pd.DataFrame, my_timestamps: Dict) -> pd.DataFrame:
     my_timestamp = my_timestamps['now']
-    pv_temp = my_pv.loc[my_timestamp:my_timestamp].copy()
+    try:  # try getting the right row according to the timestamp
+        pv_temp = my_pv.loc[my_timestamp:my_timestamp].copy()
+    except:  # if that fails, get the latest known row instead
+        pv_temp = my_pv.iloc[-1].copy()
+
     pv_temp.reset_index(inplace=True, drop=True)
     print(pv_temp)
     return pv_temp
@@ -136,8 +140,7 @@ def get_history_pv_data(my_pv: pd.DataFrame, my_timestamps: Dict) -> pd.DataFram
 
 
 def get_history_ev_data(my_ev: pd.DataFrame, my_timestamps: Dict) -> pd.DataFrame:
-    ev_temp = my_ev.loc[pd.IndexSlice[:, my_timestamps['past_from']
-        :my_timestamps['past_to']], :].copy()
+    ev_temp = my_ev.loc[pd.IndexSlice[:, my_timestamps['past_from']                                      :my_timestamps['past_to']], :].copy()
 
     print(ev_temp)
     return ev_temp
