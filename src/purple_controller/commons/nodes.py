@@ -811,15 +811,19 @@ def plot_sys_timeseries_stochastic(result: Dict, prodpv: pd.DataFrame, demandev:
     return(fig)
 
 
-def get_ev_charge_limits(result: Dict) -> Dict:
+def get_ev_charge_limits(result: Dict, params: Dict, config: Dict) -> Dict:
 
-    result2 = result['result2']
-    ev_charge_limits = result2.EVCharge[:, 0].copy()
+    if params['disable_charging_limits'] == 1:
+        ev_charge_limits = config['P_EV_MAX']
+    else:
+        result2 = result['result2']
+        ev_charge_limits = result2.EVCharge[:, 0].copy()
+
     print(ev_charge_limits)
     return ev_charge_limits
 
 
-def get_ev_charge_limits_stoch(result: Dict) -> Dict:
+def get_ev_charge_limits_stoch(result: Dict, params: Dict, config: Dict) -> Dict:
 
     result3 = result['result3']
     ev_charge_limits = result3.EVCharge[:, 0, 0].copy()

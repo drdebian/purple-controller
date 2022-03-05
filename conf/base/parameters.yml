@@ -38,3 +38,6 @@ constants:
   S_EV: 0.9983333333333333
   # P_PV_CAP: 14.28
   P_PV_ETA: 0.6
+
+general:
+  disable_charging_limits: 1
