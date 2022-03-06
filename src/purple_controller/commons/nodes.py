@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from matplotlib.offsetbox import AnchoredText
 import logging
 import time
+import datetime as dt
 
 from sqlalchemy import DDL
 
@@ -361,6 +362,8 @@ def store_model_solution_dataframes(solution: Dict) -> Dict:
 
 def store_model_solution_tables(result: Dict) -> Tuple:
 
+    my_runningtime = str(dt.datetime.now())
+
     # store results to database
     result0 = result['result0']
     result1 = result['result1']
@@ -372,10 +375,10 @@ def store_model_solution_tables(result: Dict) -> Tuple:
     #result3 = result['result3']
 
     # add timestamp for versioning
-    result0['runningdate'] = pd.datetime.now()
-    result1['runningdate'] = pd.datetime.now()
-    result2['runningdate'] = pd.datetime.now()
-    #result3['runningdate'] = pd.datetime.now()
+    result0['runningdate'] = my_runningtime
+    result1['runningdate'] = my_runningtime
+    result2['runningdate'] = my_runningtime
+    #result3['runningdate'] = my_runningtime
 
     return result0, result1, result2  # , result3
 
