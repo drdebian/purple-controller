@@ -262,3 +262,28 @@ ev_charge_limits:
   filepath: sftp:///var/local/NodeRed/commands/car_charge_limits.json
   credentials: my_remotessh_creds
   layer: model_output
+
+
+_table_result: &table_result
+  type: pandas.SQLTableDataSet
+  credentials: my_sqlite_creds
+  save_args:
+    if_exists: append
+  layer: model_output
+
+table_result0:
+  <<: *table_result
+  table_name: result0
+
+table_result1:
+  <<: *table_result
+  table_name: result1
+
+table_result2:
+  <<: *table_result
+  table_name: result2
+
+table_result3:
+  <<: *table_result
+  table_name: result3
+

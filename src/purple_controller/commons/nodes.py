@@ -2,7 +2,7 @@
 general functions used in multiple pipelines
 """
 
-from typing import Dict, Callable, Any
+from typing import Dict, Callable, Any, Tuple
 import pandas as pd
 import numpy as np
 import pulp
@@ -143,8 +143,7 @@ def get_history_pv_data(my_pv: pd.DataFrame, my_timestamps: Dict) -> pd.DataFram
 
 
 def get_history_ev_data(my_ev: pd.DataFrame, my_timestamps: Dict) -> pd.DataFrame:
-    ev_temp = my_ev.loc[pd.IndexSlice[:, my_timestamps['past_from']
-        :my_timestamps['past_to']], :].copy()
+    ev_temp = my_ev.loc[pd.IndexSlice[:, my_timestamps['past_from']:my_timestamps['past_to']], :].copy()
 
     print(ev_temp)
     return ev_temp
@@ -358,6 +357,27 @@ def store_model_solution_dataframes(solution: Dict) -> Dict:
     # dummy node to store versioned solutions
 
     return solution
+
+
+def store_model_solution_tables(result: Dict) -> Tuple:
+
+    # store results to database
+    result0 = result['result0']
+    result1 = result['result1']
+    result1.index.names = ['period']
+    result1.reset_index(drop=False, inplace=True)
+    result2 = result['result2']
+    result2.index.names = ['vehicle', 'period']
+    result2.reset_index(drop=False, inplace=True)
+    #result3 = result['result3']
+
+    # add timestamp for versioning
+    result0['runningdate'] = pd.datetime.now()
+    result1['runningdate'] = pd.datetime.now()
+    result2['runningdate'] = pd.datetime.now()
+    #result3['runningdate'] = pd.datetime.now()
+
+    return result0, result1, result2  # , result3
 
 
 def plot_sys_timeseries_simple(result: Dict, prodpv: pd.DataFrame, demandev: pd.DataFrame) -> plt.figure:

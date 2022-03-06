@@ -5,7 +5,7 @@ generated using Kedro 0.17.6
 
 from kedro.pipeline import Pipeline, node
 from purple_controller.commons.nodes import (extract_model_solution_dataframes, get_current_ev_data, get_current_pv_data, get_ev_charge_limits, get_history_ev_data, get_history_pv_data, get_model_ev_data,
-                                             get_model_pv_data, get_model_timestamps, plot_sys_timeseries_simple, predict_ev_data, predict_pv_data, solve_model, store_model_solution_dataframes)
+                                             get_model_pv_data, get_model_timestamps, plot_sys_timeseries_simple, predict_ev_data, predict_pv_data, solve_model, store_model_solution_dataframes, store_model_solution_tables)
 from .nodes import construct_model_direct
 
 
@@ -81,7 +81,13 @@ def create_pipeline(**kwargs):
             node(func=store_model_solution_dataframes,
                  inputs="direct_solution_dictionary",
                  outputs="direct_solution_results",
-                 name="store_direct_solution_node",
+                 name="store_direct_solution_dataframes_node",
+                 ),
+            node(func=store_model_solution_tables,
+                 inputs="direct_solution_dictionary",
+                 outputs=["table_result0", "table_result1",
+                          "table_result2"],
+                 name="store_direct_solution_tables_node",
                  ),
             node(func=plot_sys_timeseries_simple,
                  inputs=["direct_solution_dictionary",
