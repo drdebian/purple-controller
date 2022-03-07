@@ -205,35 +205,33 @@ def create_pipeline(**kwargs):
                 name="store_car6_node",
                 confirms="raw_car6"
             ),
-            node(
-                func=concatenate_partitions,
-                inputs="raw_carsample1",
-                outputs="concatenated_carsample1",
-                name="concatenate_carsample1_node",
-            ),
-            node(
-                func=store_partition,
-                inputs="concatenated_carsample1",
-                outputs=["table_carsample1", "rowcount_carsample1"],
-                name="store_carsample1_node",
-                confirms="raw_carsample1"
-            ),
-            node(
-                func=concatenate_partitions,
-                inputs="raw_carsample2",
-                outputs="concatenated_carsample2",
-                name="concatenate_carsample2_node",
-            ),
-            node(
-                func=store_partition,
-                inputs="concatenated_carsample2",
-                # inputs="concatenated_carsample1",
-                outputs=["table_carsample2", "rowcount_carsample2"],
-                name="store_carsample2_node",
-                confirms="raw_carsample2"
-            ),
-
-
+            # node(
+            #     func=concatenate_partitions,
+            #     inputs="raw_carsample1",
+            #     outputs="concatenated_carsample1",
+            #     name="concatenate_carsample1_node",
+            # ),
+            # node(
+            #     func=store_partition,
+            #     inputs="concatenated_carsample1",
+            #     outputs=["table_carsample1", "rowcount_carsample1"],
+            #     name="store_carsample1_node",
+            #     confirms="raw_carsample1"
+            # ),
+            # node(
+            #     func=concatenate_partitions,
+            #     inputs="raw_carsample2",
+            #     outputs="concatenated_carsample2",
+            #     name="concatenate_carsample2_node",
+            # ),
+            # node(
+            #     func=store_partition,
+            #     inputs="concatenated_carsample2",
+            #     # inputs="concatenated_carsample1",
+            #     outputs=["table_carsample2", "rowcount_carsample2"],
+            #     name="store_carsample2_node",
+            #     confirms="raw_carsample2"
+            # ),
 
 
 
