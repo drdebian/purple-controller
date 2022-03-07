@@ -78,6 +78,7 @@ cte0 as (
         round(avg(coalesce([phase3-curr], 0)), 0) as [phase3-curr],
         round(avg(coalesce([phase3-power], 0)), 0) as [phase3-power],
         round(avg(coalesce([calculatedPower], 0)), 0) as [calculatedPower],
+        max(coalesce([state], 0)) as [state],
         count(*) as cntMeasurements
     from ctea1 a
     group by a.TimeDate15m
@@ -94,7 +95,9 @@ cte0 as (
         round(avg(coalesce([phase3-volt], 0)), 0) as [phase3-volt],
         round(avg(coalesce([phase3-curr], 0)), 0) as [phase3-curr],
         round(avg(coalesce([phase3-power], 0)), 0) as [phase3-power],
-        round(avg(coalesce([calculatedPower], 0)), 0) as [calculatedPower],        count(*) as cntMeasurements
+        round(avg(coalesce([calculatedPower], 0)), 0) as [calculatedPower],
+        max(coalesce([state], 0)) as [state],
+        count(*) as cntMeasurements
     from ctea2 a
     group by a.TimeDate15m
     union
@@ -110,7 +113,9 @@ cte0 as (
         round(avg(coalesce([phase3-volt], 0)), 0) as [phase3-volt],
         round(avg(coalesce([phase3-curr], 0)), 0) as [phase3-curr],
         round(avg(coalesce([phase3-power], 0)), 0) as [phase3-power],
-        round(avg(coalesce([calculatedPower], 0)), 0) as [calculatedPower],        count(*) as cntMeasurements
+        round(avg(coalesce([calculatedPower], 0)), 0) as [calculatedPower],
+        max(coalesce([state], 0)) as [state],
+        count(*) as cntMeasurements
     from ctea3 a
     group by a.TimeDate15m
     union
@@ -126,7 +131,9 @@ cte0 as (
         round(avg(coalesce([phase3-volt], 0)), 0) as [phase3-volt],
         round(avg(coalesce([phase3-curr], 0)), 0) as [phase3-curr],
         round(avg(coalesce([phase3-power], 0)), 0) as [phase3-power],
-        round(avg(coalesce([calculatedPower], 0)), 0) as [calculatedPower],        count(*) as cntMeasurements
+        round(avg(coalesce([calculatedPower], 0)), 0) as [calculatedPower],
+        max(coalesce([state], 0)) as [state],
+        count(*) as cntMeasurements
     from ctea4 a
     group by a.TimeDate15m
     union
@@ -142,7 +149,9 @@ cte0 as (
         round(avg(coalesce([phase3-volt], 0)), 0) as [phase3-volt],
         round(avg(coalesce([phase3-curr], 0)), 0) as [phase3-curr],
         round(avg(coalesce([phase3-power], 0)), 0) as [phase3-power],
-        round(avg(coalesce([calculatedPower], 0)), 0) as [calculatedPower],        count(*) as cntMeasurements
+        round(avg(coalesce([calculatedPower], 0)), 0) as [calculatedPower],
+        max(coalesce([state], 0)) as [state],
+        count(*) as cntMeasurements
     from ctea5 a
     group by a.TimeDate15m
     union
@@ -158,11 +167,15 @@ cte0 as (
         round(avg(coalesce([phase3-volt], 0)), 0) as [phase3-volt],
         round(avg(coalesce([phase3-curr], 0)), 0) as [phase3-curr],
         round(avg(coalesce([phase3-power], 0)), 0) as [phase3-power],
-        round(avg(coalesce([calculatedPower], 0)), 0) as [calculatedPower],        count(*) as cntMeasurements
+        round(avg(coalesce([calculatedPower], 0)), 0) as [calculatedPower],
+        max(coalesce([state], 0)) as [state],
+        count(*) as cntMeasurements
     from ctea6 a
     group by a.TimeDate15m
 )
 select b.*
-from cte0 b
+from cte0 b 
+    /* where [phase1-volt] > 0
+        */
     /* where b.timestamp >= datetime('now', '-8 days')
-     */
+        */
