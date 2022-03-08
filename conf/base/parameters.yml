@@ -11,8 +11,10 @@ solverparams:
   timelimit: 600
 
 location:
-  lat: 47.44969
-  lon: 9.91852
+  lat: 47.454015362053475
+  lon: 9.919409944671076
+  #lat: 47.44969
+  #lon: 9.91852
 
 constants:
   P_NE_MAX: 35
