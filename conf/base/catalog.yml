@@ -14,8 +14,9 @@ raw_location:
       na_values: ["undefined", "null"]
       keep_default_na: True
   filename_suffix: .csv
-  path: sftp:///var/local/NodeRed/location
-  credentials: my_remotessh_creds
+  path: data/01_raw/location
+  #path: sftp:///var/local/NodeRed/location
+  #credentials: my_remotessh_creds
   layer: raw
 
 _raw_charger: &raw_charger
@@ -27,33 +28,33 @@ _raw_charger: &raw_charger
       na_values: ["undefined", "null"]
       keep_default_na: True
   filename_suffix: .csv
-  path: sftp:///var/local/NodeRed/charger
-  credentials: my_remotessh_creds
+  #path: sftp:///var/local/NodeRed/charger
+  #credentials: my_remotessh_creds
   layer: raw
 
 raw_charger1:
   <<: *raw_charger
-  path: sftp:///var/local/NodeRed/charger/wallbox1
+  path: data/01_raw/charger/wallbox1
 
 raw_charger2:
   <<: *raw_charger
-  path: sftp:///var/local/NodeRed/charger/wallbox2
+  path: data/01_raw/charger/wallbox2
 
 raw_charger3:
   <<: *raw_charger
-  path: sftp:///var/local/NodeRed/charger/wallbox3
+  path: data/01_raw/charger/wallbox3
 
 raw_charger4:
   <<: *raw_charger
-  path: sftp:///var/local/NodeRed/charger/wallbox4
+  path: data/01_raw/charger/wallbox4
 
 raw_charger5:
   <<: *raw_charger
-  path: sftp:///var/local/NodeRed/charger/wallbox5
+  path: data/01_raw/charger/wallbox5
 
 raw_charger6:
   <<: *raw_charger
-  path: sftp:///var/local/NodeRed/charger/wallbox6
+  path: data/01_raw/charger/wallbox6
 
 
 _raw_car: &raw_car
@@ -65,41 +66,41 @@ _raw_car: &raw_car
       na_values: ["undefined", "null"]
       keep_default_na: True
   filename_suffix: .csv
-  path: sftp:///var/local/NodeRed/cars
-  credentials: my_remotessh_creds
+  #path: sftp:///var/local/NodeRed/cars
+  #credentials: my_remotessh_creds
   layer: raw
 
 raw_car1:
   <<: *raw_car
-  path: sftp:///var/local/NodeRed/cars/car1
+  path: data/01_raw/cars/car1
 
 raw_car2:
   <<: *raw_car
-  path: sftp:///var/local/NodeRed/cars/car2
+  path: data/01_raw/cars/car2
 
 raw_car3:
   <<: *raw_car
-  path: sftp:///var/local/NodeRed/cars/car3
+  path: data/01_raw/cars/car3
 
 raw_car4:
   <<: *raw_car
-  path: sftp:///var/local/NodeRed/cars/car4
+  path: data/01_raw/cars/car4
 
 raw_car5:
   <<: *raw_car
-  path: sftp:///var/local/NodeRed/cars/car5
+  path: data/01_raw/cars/car5
 
 raw_car6:
   <<: *raw_car
-  path: sftp:///var/local/NodeRed/cars/car6
+  path: data/01_raw/cars/car6
 
 raw_carsample1:
   <<: *raw_car
-  path: sftp:///var/local/NodeRed/cars/sample1
+  path: data/01_raw/cars/sample1
 
 raw_carsample2:
   <<: *raw_car
-  path: sftp:///var/local/NodeRed/cars/sample2
+  path: data/01_raw/cars/sample2
 
 
 
