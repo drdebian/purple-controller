@@ -2,7 +2,7 @@ import pandas as pd
 from typing import Dict, Any, Callable, Tuple
 
 
-def concatenate_partitions(partitions: Dict[str, pd.DataFrame]) -> pd.DataFrame:
+def concatenate_partitions(partitions: Dict[str, Callable[[], Any]], model_timestamps: Dict[str, pd.Timestamp]) -> pd.DataFrame:
     """Concatenate partitions from an incremental dataset into a single dataframe.
 
     Args:
@@ -12,12 +12,24 @@ def concatenate_partitions(partitions: Dict[str, pd.DataFrame]) -> pd.DataFrame:
         pd.DataFrame: Dataframe containing concatenated dataframes
     """
 
+    print(model_timestamps['now'], model_timestamps['past_from'],
+          model_timestamps['past_to'])
+
     result = pd.DataFrame()
 
-    for partition_key, partition_data in sorted(partitions.items()):
+    for partition_key, partition_load_func in sorted(partitions.items()):
 
-        print(partition_key)
-        result = pd.concat([result, partition_data], ignore_index=True, sort=False)
+        # extract timestamp from partition name
+        partition_date = partition_key.split("_")[-2]
+        partition_time = partition_key.split("_")[-1]
+        partition_datetime = pd.to_datetime(
+            ' '.join([partition_date, partition_time]), format='%Y%m%d %H%M')
+
+        if partition_datetime >= model_timestamps['past_from'] and partition_datetime <= model_timestamps['now']:
+            partition_data = partition_load_func()
+            result = pd.concat([result, partition_data], ignore_index=True, sort=False)
+        # else:
+        #     print("Ignoring partition: ", partition_key)
 
     print(result)
 

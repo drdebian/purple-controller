@@ -6,7 +6,8 @@
 
 
 raw_location:
-  type: IncrementalDataSet
+  #type: IncrementalDataSet
+  type: PartitionedDataSet
   dataset:
     type: pandas.CSVDataSet
     load_args:
@@ -20,7 +21,8 @@ raw_location:
   layer: raw
 
 _raw_charger: &raw_charger
-  type: IncrementalDataSet
+  #type: IncrementalDataSet
+  type: PartitionedDataSet
   dataset:
     type: pandas.CSVDataSet
     load_args:
@@ -58,7 +60,8 @@ raw_charger6:
 
 
 _raw_car: &raw_car
-  type: IncrementalDataSet
+  #type: IncrementalDataSet
+  type: PartitionedDataSet
   dataset:
     type: pandas.CSVDataSet
     load_args:
@@ -110,7 +113,7 @@ table_location:
   credentials: my_sqlite_creds
   table_name: location
   save_args:
-    if_exists: append
+    if_exists: replace
   layer: primary
 
 _table_charger: &table_charger
@@ -118,7 +121,7 @@ _table_charger: &table_charger
   credentials: my_sqlite_creds
   table_name: charger
   save_args:
-    if_exists: append
+    if_exists: replace
   layer: primary
 
 table_charger1:
@@ -151,7 +154,7 @@ _table_car: &table_car
   credentials: my_sqlite_creds
   table_name: car
   save_args:
-    if_exists: append
+    if_exists: replace
   layer: primary
 
 table_car1:
