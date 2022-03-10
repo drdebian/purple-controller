@@ -28,11 +28,14 @@ def concatenate_partitions(partitions: Dict[str, Callable[[], Any]], model_times
             ' '.join([partition_date, partition_time]), format='%Y%m%d %H%M')
 
         # if partition_datetime >= model_timestamps['past_from'] and partition_datetime <= model_timestamps['now']:
-        if partition_datetime > maxdatetime and partition_datetime <= model_timestamps['now']:
+        if partition_datetime >= maxdatetime.floor('H') and partition_datetime <= model_timestamps['now']:
             partition_data = partition_load_func()
-            result = pd.concat([result, partition_data], ignore_index=True, sort=False)
-        # else:
-        #     print("Ignoring partition: ", partition_key)
+            partition_data = partition_data.loc[partition_data.TimeDate > str(
+                maxdatetime)]
+
+            if len(partition_data) > 0:
+                result = pd.concat([result, partition_data],
+                                   ignore_index=True, sort=False)
 
     print(result)
 
