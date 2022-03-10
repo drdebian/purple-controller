@@ -37,41 +37,6 @@ def load_pv_data(data_ready: Any, raw_pv_data: pd.DataFrame, timing: Dict, const
     return my_pv
 
 
-# def resample_ev_data(raw_ev_data: pd.DataFrame, timing: Dict) -> pd.DataFrame:
-#     # resample single vehicle dataframe to desired frequency
-#     # add features
-
-#     my_vehicle = raw_ev_data.copy()
-#     freq = int(60*timing['M_DT'])
-#     my_vehicle.status = my_vehicle.status.fillna('idle')
-#     #my_vehicle.rename(columns={'TimeDate': 'timestamp'}, inplace=True)
-
-#     # my_vehicle['status'] = 'ride'
-
-#     my_vehicle.reset_index(inplace=True, drop=False)
-#     my_vehicle.timestamp = pd.to_datetime(my_vehicle.timestamp)
-#     my_vehicle.set_index('timestamp', inplace=True)
-#     my_vehicle = my_vehicle.resample(str(freq)+'T').agg(
-#         {'vehicle': 'max',
-#          'id': 'max',
-#          'status': 'max',
-#          'positionLat': 'mean',
-#          'positionLon': 'mean',
-#          'distanceLastCharge': 'mean',
-#          'avgSpeedLastCharge': 'mean',
-#          'stateOfCharge': 'mean',
-#          }
-#     ).pad()  # .round(2)  # resample
-#     my_vehicle['id'] = my_vehicle['id'].astype(int)
-
-#     my_vehicle['chgSOC'] = my_vehicle.stateOfCharge - my_vehicle.stateOfCharge.shift(1)
-
-#     print('new method')
-#     print(my_vehicle)
-
-#     return my_vehicle
-
-
 def load_ev_data(data_ready: Any, raw_ev_data: pd.DataFrame, config_model: Dict, timing: Dict, location: Dict) -> pd.DataFrame:
 
     my_vehicles = config_model['vehicles']
@@ -81,8 +46,6 @@ def load_ev_data(data_ready: Any, raw_ev_data: pd.DataFrame, config_model: Dict,
     appended_data = []
     for v in my_vehicles:
         my_vehicle = raw_ev_data.copy().loc[pd.IndexSlice[v, :], :]
-        # my_vehicle_.drop(['chgSOC'], inplace=True, axis=1)
-        # my_vehicle = resample_ev_data(my_vehicle_, timing)
 
         # # my_vehicle['status'] = 'ride'
 
@@ -92,18 +55,17 @@ def load_ev_data(data_ready: Any, raw_ev_data: pd.DataFrame, config_model: Dict,
         my_vehicle.set_index('timestamp', inplace=True)
         my_vehicle = my_vehicle.resample(str(freq)+'T').agg(
             {'vehicle': 'max',
-             'id': 'max',
              'status': 'max',
              'positionLat': 'mean',
              'positionLon': 'mean',
-             'distanceLastCharge': 'mean',
-             'avgSpeedLastCharge': 'mean',
              'stateOfCharge': 'mean',
              'cntMeasurements': 'mean',
              'chgSOC': 'mean',
+             'state': 'max',
              }
         ).pad()  # .round(2)  # resample
-        my_vehicle['id'] = my_vehicle['id'].astype(int)
+        # my_vehicle['id'] = my_vehicle['id'].astype(int)
+        my_vehicle['state'] = my_vehicle['state'].astype(int)
 
         my_vehicle['SOC_kWh'] = my_vehicle['stateOfCharge'] * \
             config_model['E_EV_CAP'][v]/100
@@ -123,6 +85,7 @@ def load_ev_data(data_ready: Any, raw_ev_data: pd.DataFrame, config_model: Dict,
                        (round(my_vehicle['positionLat'], 3) == round(location['lat'], 3)) &
                        (round(my_vehicle['positionLon'], 3) == round(location['lon'], 3)) &
                        (my_vehicle['power'] <= 0), 'loadable'] = True
+        my_vehicle.loc[(my_vehicle['state'] > 0), 'loadable'] = True
 
         appended_data.append(my_vehicle)
     my_ev = pd.concat(appended_data, axis=0)
