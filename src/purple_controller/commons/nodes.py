@@ -393,6 +393,8 @@ def plot_sys_timeseries_simple(result: Dict, prodpv: pd.DataFrame, demandev: pd.
     my_periods = range(0, int(result0.Periods[0]))  # c1['T'])
     my_instants = range(0, int(result0.Periods[0])+1)
     my_vehicles = result2.index.get_level_values('vehicle').unique()
+    my_maxgriddraw = max(np.array([result1.GridDraw.loc[t]
+                                   for t in my_periods]))
 
     plt.style.use('ggplot')
 
@@ -401,7 +403,7 @@ def plot_sys_timeseries_simple(result: Dict, prodpv: pd.DataFrame, demandev: pd.
     # plot Overview
     axs[0].step(np.array(my_periods), np.array([result1.GridDraw.loc[t]
                                                 for t in my_periods]), '.-r', where='post', label='$GridDraw$', lw=3)
-    axs[0].axhline(result0.GridDrawCeiling[0],
+    axs[0].axhline(my_maxgriddraw,
                    ls=':', label='$GridDraw Ceiling$')
     axs[0].step(np.array(my_periods), np.array([result1.GridFeed.loc[t]
                                                 for t in my_periods]), '.-m', where='post', label='$GridFeed$', lw=3)
@@ -421,7 +423,7 @@ def plot_sys_timeseries_simple(result: Dict, prodpv: pd.DataFrame, demandev: pd.
                 )
 
     at = AnchoredText(
-        "$n_{max}$ = " + str(round(result0.GridDrawCeiling[0], 2)),
+        "$n_{max}$ = " + str(round(my_maxgriddraw, 2)),
         # prop=dict(size=15),
         frameon=True,
         loc='upper center')
