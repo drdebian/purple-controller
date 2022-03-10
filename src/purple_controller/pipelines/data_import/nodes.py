@@ -2,7 +2,7 @@ import pandas as pd
 from typing import Dict, Any, Callable, Tuple
 
 
-def concatenate_partitions(partitions: Dict[str, Callable[[], Any]], model_timestamps: Dict[str, pd.Timestamp]) -> pd.DataFrame:
+def concatenate_partitions(partitions: Dict[str, Callable[[], Any]], model_timestamps: Dict[str, pd.Timestamp], mtd: pd.DataFrame) -> pd.DataFrame:
     """Concatenate partitions from an partitioned dataset into a single dataframe.
 
     Args:
@@ -16,6 +16,8 @@ def concatenate_partitions(partitions: Dict[str, Callable[[], Any]], model_times
     #       model_timestamps['past_to'])
 
     result = pd.DataFrame()
+    maxdatetime = pd.to_datetime(max(mtd.mtd))
+    print("mtd: ", maxdatetime)
 
     for partition_key, partition_load_func in sorted(partitions.items()):
 
@@ -25,7 +27,8 @@ def concatenate_partitions(partitions: Dict[str, Callable[[], Any]], model_times
         partition_datetime = pd.to_datetime(
             ' '.join([partition_date, partition_time]), format='%Y%m%d %H%M')
 
-        if partition_datetime >= model_timestamps['past_from'] and partition_datetime <= model_timestamps['now']:
+        # if partition_datetime >= model_timestamps['past_from'] and partition_datetime <= model_timestamps['now']:
+        if partition_datetime > maxdatetime and partition_datetime <= model_timestamps['now']:
             partition_data = partition_load_func()
             result = pd.concat([result, partition_data], ignore_index=True, sort=False)
         # else:
@@ -48,12 +51,16 @@ def store_partition(partition: pd.DataFrame, mtd: pd.DataFrame) -> Tuple:
         int: number of records in Dataframe
     """
 
-    maxdatetime = max(mtd.mtd)
-    # print("maxtimedate:", maxdatetime)
-    # print(partition.loc[partition.TimeDate > maxdatetime])
+    # maxdatetime = max(mtd.mtd)
+    # # print("maxtimedate:", maxdatetime)
+    # # print(partition.loc[partition.TimeDate > maxdatetime])
 
-    partition_delta = partition.loc[partition.TimeDate > maxdatetime].copy()
+    # partition_delta = partition.loc[partition.TimeDate > maxdatetime].copy()
 
-    rowcount = len(partition_delta)
+    # rowcount = len(partition_delta)
 
-    return partition_delta, rowcount
+    # return partition_delta, rowcount
+
+    rowcount = len(partition)
+
+    return partition, rowcount

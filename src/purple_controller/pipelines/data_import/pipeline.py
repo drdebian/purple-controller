@@ -15,7 +15,8 @@ def create_pipeline(**kwargs):
                  ),
             node(
                 func=concatenate_partitions,
-                inputs=["raw_location", "model_timestamps"],
+                inputs=["raw_location", "model_timestamps",
+                        "table_maxtimedate_location"],
                 outputs="concatenated_location",
                 name="concatenate_location_node",
             ),
@@ -30,7 +31,8 @@ def create_pipeline(**kwargs):
 
             node(
                 func=concatenate_partitions,
-                inputs=["raw_charger1", "model_timestamps"],
+                inputs=["raw_charger1", "model_timestamps",
+                        "table_maxtimedate_charger1"],
                 outputs="concatenated_charger1",
                 name="concatenate_charger1_node",
             ),
@@ -44,7 +46,8 @@ def create_pipeline(**kwargs):
 
             node(
                 func=concatenate_partitions,
-                inputs=["raw_charger2", "model_timestamps"],
+                inputs=["raw_charger2", "model_timestamps",
+                        "table_maxtimedate_charger2"],
                 outputs="concatenated_charger2",
                 name="concatenate_charger2_node",
             ),
@@ -58,7 +61,8 @@ def create_pipeline(**kwargs):
 
             node(
                 func=concatenate_partitions,
-                inputs=["raw_charger3", "model_timestamps"],
+                inputs=["raw_charger3", "model_timestamps",
+                        "table_maxtimedate_charger3"],
                 outputs="concatenated_charger3",
                 name="concatenate_charger3_node",
             ),
@@ -72,7 +76,8 @@ def create_pipeline(**kwargs):
 
             node(
                 func=concatenate_partitions,
-                inputs=["raw_charger4", "model_timestamps"],
+                inputs=["raw_charger4", "model_timestamps",
+                        "table_maxtimedate_charger4"],
                 outputs="concatenated_charger4",
                 name="concatenate_charger4_node",
             ),
@@ -86,7 +91,8 @@ def create_pipeline(**kwargs):
 
             node(
                 func=concatenate_partitions,
-                inputs=["raw_charger5", "model_timestamps"],
+                inputs=["raw_charger5", "model_timestamps",
+                        "table_maxtimedate_charger5"],
                 outputs="concatenated_charger5",
                 name="concatenate_charger5_node",
             ),
@@ -116,7 +122,7 @@ def create_pipeline(**kwargs):
 
             node(
                 func=concatenate_partitions,
-                inputs=["raw_car1", "model_timestamps"],
+                inputs=["raw_car1", "model_timestamps", "table_maxtimedate_car1"],
                 outputs="concatenated_car1",
                 name="concatenate_car1_node",
             ),
@@ -130,7 +136,7 @@ def create_pipeline(**kwargs):
 
             node(
                 func=concatenate_partitions,
-                inputs=["raw_car2", "model_timestamps"],
+                inputs=["raw_car2", "model_timestamps", "table_maxtimedate_car2"],
                 outputs="concatenated_car2",
                 name="concatenate_car2_node",
             ),
@@ -144,7 +150,7 @@ def create_pipeline(**kwargs):
 
             node(
                 func=concatenate_partitions,
-                inputs=["raw_car3", "model_timestamps"],
+                inputs=["raw_car3", "model_timestamps", "table_maxtimedate_car3"],
                 outputs="concatenated_car3",
                 name="concatenate_car3_node",
             ),
@@ -158,7 +164,7 @@ def create_pipeline(**kwargs):
 
             node(
                 func=concatenate_partitions,
-                inputs=["raw_car4", "model_timestamps"],
+                inputs=["raw_car4", "model_timestamps", "table_maxtimedate_car4"],
                 outputs="concatenated_car4",
                 name="concatenate_car4_node",
             ),
@@ -172,7 +178,7 @@ def create_pipeline(**kwargs):
 
             node(
                 func=concatenate_partitions,
-                inputs=["raw_car5", "model_timestamps"],
+                inputs=["raw_car5", "model_timestamps", "table_maxtimedate_car5"],
                 outputs="concatenated_car5",
                 name="concatenate_car5_node",
             ),
