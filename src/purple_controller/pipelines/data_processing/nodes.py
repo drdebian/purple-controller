@@ -37,20 +37,56 @@ def load_pv_data(data_ready: Any, raw_pv_data: pd.DataFrame, timing: Dict, const
     return my_pv
 
 
+# def resample_ev_data(raw_ev_data: pd.DataFrame, timing: Dict) -> pd.DataFrame:
+#     # resample single vehicle dataframe to desired frequency
+#     # add features
+
+#     my_vehicle = raw_ev_data.copy()
+#     freq = int(60*timing['M_DT'])
+#     my_vehicle.status = my_vehicle.status.fillna('idle')
+#     #my_vehicle.rename(columns={'TimeDate': 'timestamp'}, inplace=True)
+
+#     # my_vehicle['status'] = 'ride'
+
+#     my_vehicle.reset_index(inplace=True, drop=False)
+#     my_vehicle.timestamp = pd.to_datetime(my_vehicle.timestamp)
+#     my_vehicle.set_index('timestamp', inplace=True)
+#     my_vehicle = my_vehicle.resample(str(freq)+'T').agg(
+#         {'vehicle': 'max',
+#          'id': 'max',
+#          'status': 'max',
+#          'positionLat': 'mean',
+#          'positionLon': 'mean',
+#          'distanceLastCharge': 'mean',
+#          'avgSpeedLastCharge': 'mean',
+#          'stateOfCharge': 'mean',
+#          }
+#     ).pad()  # .round(2)  # resample
+#     my_vehicle['id'] = my_vehicle['id'].astype(int)
+
+#     my_vehicle['chgSOC'] = my_vehicle.stateOfCharge - my_vehicle.stateOfCharge.shift(1)
+
+#     print('new method')
+#     print(my_vehicle)
+
+#     return my_vehicle
+
+
 def load_ev_data(data_ready: Any, raw_ev_data: pd.DataFrame, config_model: Dict, timing: Dict, location: Dict) -> pd.DataFrame:
 
     my_vehicles = config_model['vehicles']
     freq = int(60*timing['M_DT'])
-    numcolumns = ['']
+    # numcolumns = ['']
 
     appended_data = []
     for v in my_vehicles:
         my_vehicle = raw_ev_data.copy().loc[pd.IndexSlice[v, :], :]
+        # my_vehicle_.drop(['chgSOC'], inplace=True, axis=1)
+        # my_vehicle = resample_ev_data(my_vehicle_, timing)
+
+        # # my_vehicle['status'] = 'ride'
 
         my_vehicle.status = my_vehicle.status.fillna('idle')
-
-        # my_vehicle['status'] = 'ride'
-
         my_vehicle.reset_index(inplace=True, drop=False)
         my_vehicle.timestamp = pd.to_datetime(my_vehicle.timestamp)
         my_vehicle.set_index('timestamp', inplace=True)
