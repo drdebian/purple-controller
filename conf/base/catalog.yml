@@ -12,7 +12,7 @@ raw_location:
     type: pandas.CSVDataSet
     load_args:
       delimiter: ";"
-      na_values: ["undefined", "null"]
+      na_values: ["undefined", "null", "[object Object]"]
       keep_default_na: True
   filename_suffix: .csv
   path: data/01_raw/location
@@ -27,7 +27,7 @@ _raw_charger: &raw_charger
     type: pandas.CSVDataSet
     load_args:
       delimiter: ";"
-      na_values: ["undefined", "null"]
+      na_values: ["undefined", "null", "[object Object]"]
       keep_default_na: True
   filename_suffix: .csv
   #path: sftp:///var/local/NodeRed/charger
@@ -66,7 +66,7 @@ _raw_car: &raw_car
     type: pandas.CSVDataSet
     load_args:
       delimiter: ";"
-      na_values: ["undefined", "null"]
+      na_values: ["undefined", "null", "[object Object]"]
       keep_default_na: True
   filename_suffix: .csv
   #path: sftp:///var/local/NodeRed/cars
@@ -216,7 +216,7 @@ raw_config_cars:
 ev_data:
   type: pandas.SQLQueryDataSet
   credentials: my_sqlite_creds
-  filepath: src/sqlstatements/cars_15min_avg.sql
+  filepath: src/sqlstatements/cars_15min_avg_with_chargers.sql
   load_args:
     index_col: ['vehicle', 'timestamp']
   layer: primary
