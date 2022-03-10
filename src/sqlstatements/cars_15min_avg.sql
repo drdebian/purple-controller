@@ -63,8 +63,6 @@ cte0 as (
         round(avg(coalesce([distanceLastCharge], 0)), 0) as [distanceLastCharge],
         round(avg(coalesce([avgSpeedLastCharge], 0)), 0) as [avgSpeedLastCharge],
         round(avg(coalesce([stateOfCharge], 0)), 0) as [stateOfCharge],
-        round(avg(coalesce([remainingRange], 0)), 0) as [remainingRange],
-        round(avg(coalesce([remainingEnergy], 0)), 0) as [remainingEnergy],
         count(*) as cntMeasurements
     from ctea1 a
     group by a.TimeDate15m
@@ -78,8 +76,7 @@ cte0 as (
         round(avg(coalesce([distanceLastCharge], 0)), 0) as [distanceLastCharge],
         round(avg(coalesce([avgSpeedLastCharge], 0)), 0) as [avgSpeedLastCharge],
         round(avg(coalesce([stateOfCharge], 0)), 0) as [stateOfCharge],
-        round(avg(coalesce([remainingRange], 0)), 0) as [remainingRange],
-        round(avg(coalesce([remainingEnergy], 0)), 0) as [remainingEnergy],        count(*) as cntMeasurements
+        count(*) as cntMeasurements
     from ctea2 a
     group by a.TimeDate15m
     union
@@ -92,8 +89,6 @@ cte0 as (
         round(avg(coalesce([distanceLastCharge], 0)), 0) as [distanceLastCharge],
         round(avg(coalesce([avgSpeedLastCharge], 0)), 0) as [avgSpeedLastCharge],
         round(avg(coalesce([stateOfCharge], 0)), 0) as [stateOfCharge],
-        round(avg(coalesce([remainingRange], 0)), 0) as [remainingRange],
-        round(avg(coalesce([remainingEnergy], 0)), 0) as [remainingEnergy],
         count(*) as cntMeasurements
     from ctea3 a
     group by a.TimeDate15m
@@ -107,8 +102,7 @@ cte0 as (
         round(avg(coalesce([distanceLastCharge], 0)), 0) as [distanceLastCharge],
         round(avg(coalesce([avgSpeedLastCharge], 0)), 0) as [avgSpeedLastCharge],
         round(avg(coalesce([stateOfCharge], 0)), 0) as [stateOfCharge],
-        round(avg(coalesce([remainingRange], 0)), 0) as [remainingRange],
-        round(avg(coalesce([remainingEnergy], 0)), 0) as [remainingEnergy],        count(*) as cntMeasurements
+        count(*) as cntMeasurements
     from ctea4 a
     group by a.TimeDate15m
     union
@@ -121,8 +115,7 @@ cte0 as (
         round(avg(coalesce([distanceLastCharge], 0)), 0) as [distanceLastCharge],
         round(avg(coalesce([avgSpeedLastCharge], 0)), 0) as [avgSpeedLastCharge],
         round(avg(coalesce([stateOfCharge], 0)), 0) as [stateOfCharge],
-        round(avg(coalesce([remainingRange], 0)), 0) as [remainingRange],
-        round(avg(coalesce([remainingEnergy], 0)), 0) as [remainingEnergy],        count(*) as cntMeasurements
+        count(*) as cntMeasurements
     from ctea5 a
     group by a.TimeDate15m
 )

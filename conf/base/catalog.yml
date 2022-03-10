@@ -97,13 +97,13 @@ raw_car6:
   <<: *raw_car
   path: data/01_raw/cars/car6
 
-raw_carsample1:
-  <<: *raw_car
-  path: data/01_raw/cars/sample1
+# raw_carsample1:
+#   <<: *raw_car
+#   path: data/01_raw/cars/sample1
 
-raw_carsample2:
-  <<: *raw_car
-  path: data/01_raw/cars/sample2
+# raw_carsample2:
+#   <<: *raw_car
+#   path: data/01_raw/cars/sample2
 
 
 

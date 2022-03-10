@@ -3,17 +3,17 @@ from typing import Dict, Any, Callable, Tuple
 
 
 def concatenate_partitions(partitions: Dict[str, Callable[[], Any]], model_timestamps: Dict[str, pd.Timestamp]) -> pd.DataFrame:
-    """Concatenate partitions from an incremental dataset into a single dataframe.
+    """Concatenate partitions from an partitioned dataset into a single dataframe.
 
     Args:
-        partitions (Dict[str, pd.DataFrame]): Dictionary of dataframes to concatenate indexed by partition name
+        partitions (Dict[str, Callable]): Dictionary of dataframe loading functions to concatenate indexed by partition name
 
     Returns:
         pd.DataFrame: Dataframe containing concatenated dataframes
     """
 
-    print(model_timestamps['now'], model_timestamps['past_from'],
-          model_timestamps['past_to'])
+    # print(model_timestamps['now'], model_timestamps['past_from'],
+    #       model_timestamps['past_to'])
 
     result = pd.DataFrame()
 

@@ -63,8 +63,6 @@ def load_ev_data(data_ready: Any, raw_ev_data: pd.DataFrame, config_model: Dict,
              'distanceLastCharge': 'mean',
              'avgSpeedLastCharge': 'mean',
              'stateOfCharge': 'mean',
-             'remainingRange': 'mean',
-             'remainingEnergy': 'mean',
              'cntMeasurements': 'mean',
              'chgSOC': 'mean',
              }
