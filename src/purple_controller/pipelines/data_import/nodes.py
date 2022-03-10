@@ -36,7 +36,8 @@ def concatenate_partitions(partitions: Dict[str, Callable[[], Any]], model_times
     return result
 
 
-def store_partition(partition: pd.DataFrame) -> Tuple:  # pd.DataFrame:
+# pd.DataFrame:
+def store_partition(partition: pd.DataFrame, mtd: pd.DataFrame) -> Tuple:
     """Passthrough function to store a concatenated dataframe partition
 
     Args:
@@ -47,6 +48,12 @@ def store_partition(partition: pd.DataFrame) -> Tuple:  # pd.DataFrame:
         int: number of records in Dataframe
     """
 
-    rowcount = len(partition)
+    maxdatetime = max(mtd.mtd)
+    # print("maxtimedate:", maxdatetime)
+    # print(partition.loc[partition.TimeDate > maxdatetime])
 
-    return partition, rowcount
+    partition_delta = partition.loc[partition.TimeDate > maxdatetime].copy()
+
+    rowcount = len(partition_delta)
+
+    return partition_delta, rowcount
