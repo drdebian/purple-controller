@@ -61,6 +61,8 @@ def load_ev_data(data_ready: Any, raw_ev_data: pd.DataFrame, config_model: Dict,
              'stateOfCharge': 'mean',
              'cntMeasurements': 'mean',
              'chgSOC': 'mean',
+             'activePower-W': 'mean',
+             'calculatedPower': 'mean',
              'state': 'max',
              }
         ).pad()  # .round(2)  # resample
