@@ -213,6 +213,20 @@ raw_config_cars:
 #   layer: raw
 
 
+data_ready:
+  type: pickle.PickleDataSet
+  filepath: data/03_primary/data_ready.pickle
+
+processed_pv_data:
+  type: pickle.PickleDataSet
+  filepath: data/03_primary/processed_pv_data.pickle
+
+processed_ev_data:
+  type: pickle.PickleDataSet
+  filepath: data/03_primary/processed_ev_data.pickle
+
+
+
 ev_data:
   type: pandas.SQLQueryDataSet
   credentials: my_sqlite_creds
