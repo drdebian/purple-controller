@@ -287,9 +287,18 @@ table_result2:
   <<: *table_result
   table_name: result2
 
-table_result3:
+
+table_result0_rule:
   <<: *table_result
-  table_name: result3
+  table_name: result0_rule
+
+table_result1_rule:
+  <<: *table_result
+  table_name: result1_rule
+
+table_result2_rule:
+  <<: *table_result
+  table_name: result2_rule
 
 
 
