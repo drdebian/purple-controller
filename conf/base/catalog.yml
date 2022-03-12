@@ -270,6 +270,26 @@ direct_solution_plot:
   layer: reporting
 
 
+solved_rule_model:
+  type: pickle.PickleDataSet
+  filepath: data/06_models/solved_rule_model.pickle
+  layer: models
+
+rule_solution_results:
+  type: pickle.PickleDataSet
+  filepath: data/07_model_output/rule_solution.pickle
+  versioned: True
+  layer: model_output
+
+rule_solution_plot:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/rule_solution.png
+  versioned: True
+  layer: reporting
+
+
+
+
 # ev_charge_limits:
 #   type: pandas.JSONDataSet
 #   filepath: data/07_model_output/ev_charge_limits.json
