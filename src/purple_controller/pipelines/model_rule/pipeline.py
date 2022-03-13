@@ -65,7 +65,7 @@ def create_pipeline(**kwargs):
             node(func=construct_model_rule,
                  inputs=["params:timing", "config_model",
                          "model_pv_data", "model_ev_data"],
-                 outputs="unsolved_direct_model",
+                 outputs="unsolved_rule_model",
                  name="construct_rule_model_node",
                  ),
             node(func=solve_model,
