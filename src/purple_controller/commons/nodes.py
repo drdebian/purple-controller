@@ -144,7 +144,7 @@ def get_history_pv_data(my_pv: pd.DataFrame, my_timestamps: Dict) -> pd.DataFram
 
 
 def get_history_ev_data(my_ev: pd.DataFrame, my_timestamps: Dict) -> pd.DataFrame:
-    ev_temp = my_ev.loc[pd.IndexSlice[:, my_timestamps['past_from']:my_timestamps['past_to']], :].copy()
+    ev_temp = my_ev.loc[pd.IndexSlice[:, my_timestamps['past_from']                                      :my_timestamps['past_to']], :].copy()
 
     print(ev_temp)
     return ev_temp
@@ -860,17 +860,27 @@ def plot_sys_timeseries_stochastic(result: Dict, prodpv: pd.DataFrame, demandev:
 
 def get_ev_charge_limits(result: Dict, params: Dict, config: Dict) -> Dict:
 
-    if params['disable_charging_limits'] == 1:
-        ev_charge_limits = pd.DataFrame()
-        ev_charge_limits['vehicle'] = config['P_EV_MAX'].keys()
-        ev_charge_limits['EVCharge'] = config['P_EV_MAX'].values()
-        ev_charge_limits.set_index('vehicle', inplace=True)
-        ev_charge_limits = ev_charge_limits.EVCharge[:].copy()
-    else:
-        result2 = result['result2']
-        ev_charge_limits = result2.EVCharge[:, 0].copy()
+    # prepare maximums in case of override
+    ev_charge_limits_override = pd.DataFrame()
+    ev_charge_limits_override['vehicle'] = config['P_EV_MAX'].keys()
+    ev_charge_limits_override['EVCharge'] = config['P_EV_MAX'].values()
+    ev_charge_limits_override.set_index('vehicle', inplace=True)
+    ev_charge_limits_override = ev_charge_limits_override.EVCharge[:].copy()
 
-    print(ev_charge_limits)
+    # prepare real data in case of no override
+    ev_charge_limits_real = result['result2'].EVCharge[:, 0].copy()
+
+    if params['disable_charging_limits'] == 1:
+        print("override detected!")
+        ev_charge_limits = ev_charge_limits_override
+        print("values for output:")
+        print(ev_charge_limits_override)
+        print("real values from model:")
+        print(ev_charge_limits_real)
+    else:
+        ev_charge_limits = ev_charge_limits_real
+        print(ev_charge_limits)
+
     return ev_charge_limits
 
 

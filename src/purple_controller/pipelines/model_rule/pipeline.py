@@ -95,11 +95,11 @@ def create_pipeline(**kwargs):
                  outputs="rule_solution_plot",
                  name="plot_rule_solution_node",
                  ),
-            # node(func=get_ev_charge_limits,
-            #      inputs=["rule_solution_dictionary",
-            #              "params:general", "config_model"],
-            #      outputs="ev_charge_limits",
-            #      name="get_ev_charge_limits_node",
-            #      ),
+            node(func=get_ev_charge_limits,
+                 inputs=["rule_solution_dictionary",
+                         "params:general", "config_model"],
+                 outputs="ev_charge_limits",
+                 name="get_ev_charge_limits_node",
+                 ),
 
         ])

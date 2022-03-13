@@ -131,22 +131,22 @@ def construct_model_rule(timing: Dict, config: Dict, production_pv: pd.DataFrame
     ev_in_tot = pulp.LpVariable.dicts(
         "EVChargeTotal", Periods, lowBound=0, cat="Continuous"
     )
-    # binary variables to couple ev_in to EV based on rules
-    I1 = pulp.LpVariable.dicts(
-        "Interval1", [(v, t) for v in my_vehicles for t in Periods], cat="Binary"
-    )
-    I2 = pulp.LpVariable.dicts(
-        "Interval2", [(v, t) for v in my_vehicles for t in Periods], cat="Binary"
-    )
-    I3 = pulp.LpVariable.dicts(
-        "Interval3", [(v, t) for v in my_vehicles for t in Periods], cat="Binary"
-    )
-    I4 = pulp.LpVariable.dicts(
-        "Interval4", [(v, t) for v in my_vehicles for t in Periods], cat="Binary"
-    )
-    I5 = pulp.LpVariable.dicts(
-        "Interval5", [(v, t) for v in my_vehicles for t in Periods], cat="Binary"
-    )
+    # # binary variables to couple ev_in to EV based on rules
+    # I1 = pulp.LpVariable.dicts(
+    #     "Interval1", [(v, t) for v in my_vehicles for t in Periods], cat="Binary"
+    # )
+    # I2 = pulp.LpVariable.dicts(
+    #     "Interval2", [(v, t) for v in my_vehicles for t in Periods], cat="Binary"
+    # )
+    # I3 = pulp.LpVariable.dicts(
+    #     "Interval3", [(v, t) for v in my_vehicles for t in Periods], cat="Binary"
+    # )
+    # I4 = pulp.LpVariable.dicts(
+    #     "Interval4", [(v, t) for v in my_vehicles for t in Periods], cat="Binary"
+    # )
+    # I5 = pulp.LpVariable.dicts(
+    #     "Interval5", [(v, t) for v in my_vehicles for t in Periods], cat="Binary"
+    # )
 
     EV = pulp.LpVariable.dicts(
         "EVSOC",
@@ -175,7 +175,9 @@ def construct_model_rule(timing: Dict, config: Dict, production_pv: pd.DataFrame
     ###############
 
     model += pulp.lpSum([n_out[t]*t for t in Periods]) + \
-        (1/T)*pulp.lpSum(n_out) - pulp.lpSum(EV)
+        (1/T)*pulp.lpSum(n_out)  # - pulp.lpSum(EV)
+    # + (1/T)*pulp.lpSum(n_out) - pulp.lpSum([(1/E_EV_MAX[v])*EV[(v, t)]  for v in my_vehicles for t in Periods])
+
     #model += pulp.lpSum(n_out)
     # model += pulp.lpSum([n_out[t]*t for t in Periods])
     #model += pulp.lpSum([-EV[(v, T)]*(1/E_EV_MAX[v]) for v in my_vehicles])
@@ -247,26 +249,26 @@ def construct_model_rule(timing: Dict, config: Dict, production_pv: pd.DataFrame
             model += ev_in_act[(v, t)] <= 1
 
             # trickle charge to 80% as soon as plugged in as default
-            # model += ev_in_act[(v, t)] >= .8 - EV[(v, t)]*(1/E_EV_MAX[v])
+            model += ev_in_act[(v, t)] >= .8 - EV[(v, t)]*(1/E_EV_MAX[v])
 
             # limit charging power based on SOC
-            # model += ev_in[(v, t)] <= P_EV_MAX[v] - \
-            #     (P_EV_MAX[v]-P_EV_MIN[v])/E_EV_MAX[v]*EV[(v, t)]
+            model += ev_in[(v, t)] <= P_EV_MAX[v] - \
+                (P_EV_MAX[v]-P_EV_MIN[v])/E_EV_MAX[v]*EV[(v, t)]
 
-            # SOS1 constraint on I1-I5 intervals
-            model += I1[(v, t)] + I2[(v, t)] + I3[(v, t)] + I4[(v, t)] + I5[(v, t)] == 1
+            # # SOS1 constraint on I1-I5 intervals
+            # model += I1[(v, t)] + I2[(v, t)] + I3[(v, t)] + I4[(v, t)] + I5[(v, t)] == 1
 
-            # upper bounds
-            model += EV[(v, t)] <= E_EV_MAX[v] * \
-                (1 - 4/5*I1[(v, t)] - 3/5*I2[(v, t)] - 2/5*I3[(v, t)] - 1/5*I4[(v, t)])
+            # # upper bounds
+            # model += EV[(v, t)] <= E_EV_MAX[v] * \
+            #     (1 - 4/5*I1[(v, t)] - 3/5*I2[(v, t)] - 2/5*I3[(v, t)] - 1/5*I4[(v, t)])
 
-            # lower bounds
-            model += EV[(v, t)] >= E_EV_MAX[v] * \
-                (0 + 1/5*I2[(v, t)] + 2/5*I3[(v, t)] + 3/5*I4[(v, t)] + 4/5*I5[(v, t)])
+            # # lower bounds
+            # model += EV[(v, t)] >= E_EV_MAX[v] * \
+            #     (0 + 1/5*I2[(v, t)] + 2/5*I3[(v, t)] + 3/5*I4[(v, t)] + 4/5*I5[(v, t)])
 
-            # limit charging power based on EVSOC-interval
-            model += ev_in[(v, t)] <= P_EV_MAX[v] - (P_EV_MAX[v]-P_EV_MIN[v]) * \
-                (1/4*I2[(v, t)]+2/4*I3[(v, t)]+3/4*I4[(v, t)]+4/4*I5[(v, t)])
+            # # limit charging power based on EVSOC-interval
+            # model += ev_in[(v, t)] <= P_EV_MAX[v] - (P_EV_MAX[v]-P_EV_MIN[v]) * \
+            #     (1/4*I2[(v, t)]+2/4*I3[(v, t)]+3/4*I4[(v, t)]+4/4*I5[(v, t)])
 
     # initial conditions
     # model += B[0] == B[T]
