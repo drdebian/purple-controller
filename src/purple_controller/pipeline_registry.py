@@ -21,7 +21,7 @@ def register_pipelines() -> Dict[str, Pipeline]:
     model_rule_pipeline = mr.create_pipeline()
 
     return {
-        "__default__": model_direct_pipeline
+        "__default__": model_rule_pipeline
         + data_import_pipeline
         + data_processing_pipeline,
         "data_import": data_import_pipeline,

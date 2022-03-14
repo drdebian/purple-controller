@@ -283,13 +283,8 @@ def construct_model_rule(timing: Dict, config: Dict, production_pv: pd.DataFrame
 
         # model += EV[(v, 0)] == 10  # demand_ev.SOC_kWh.loc[v, 0]
         # model += EV[(v, 0)] <= EV[(v, T)]
-        # model += EV[(v, 0)] >= EV[(v, T)] - P_EV_MIN * M_DT
 
-        # model += EV[(v, 0)] == EV[(v, T)] + \
-        #     EV_under[(v, T)] - EV_over[(v, T)]
-        # pass
-
-        # calculate PV KPIs
+    # calculate PV KPIs
     model += wPro == pulp.lpSum(production_pv.PV_kW)
     model += wVer == pulp.lpSum(ev_in_tot)
     model += wBez == pulp.lpSum(n_out)
