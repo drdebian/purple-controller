@@ -190,17 +190,28 @@ table_carsample2:
   table_name: carsample2
 
 
+# raw_config_lila:
+#   type: json.JSONDataSet
+#   filepath: sftp:///var/local/NodeRed/json/anlage.json
+#   credentials: my_remotessh_creds
+#   layer: raw
+
+# raw_config_cars:
+#   type: json.JSONDataSet
+#   filepath: sftp:///var/local/NodeRed/json/cars.json
+#   credentials: my_remotessh_creds
+#   layer: raw
+
 raw_config_lila:
   type: json.JSONDataSet
-  filepath: sftp:///var/local/NodeRed/json/anlage.json
-  credentials: my_remotessh_creds
+  filepath: data/01_raw/json/anlage.json
   layer: raw
 
 raw_config_cars:
   type: json.JSONDataSet
-  filepath: sftp:///var/local/NodeRed/json/cars.json
-  credentials: my_remotessh_creds
+  filepath: data/01_raw/json/cars.json
   layer: raw
+
 
 # raw_config_lila:
 #   type: json.JSONDataSet
