@@ -83,10 +83,10 @@ def load_ev_data(data_ready: Any, raw_ev_data: pd.DataFrame, config_model: Dict,
             my_vehicle['power'] > 0), 'driving'] = True
 
         my_vehicle['loadable'] = False
-        my_vehicle.loc[(my_vehicle['status'] != 'ride') &
-                       (round(my_vehicle['positionLat'], 3) == round(location['lat'], 3)) &
-                       (round(my_vehicle['positionLon'], 3) == round(location['lon'], 3)) &
-                       (my_vehicle['power'] <= 0), 'loadable'] = True
+        # my_vehicle.loc[(my_vehicle['status'] != 'ride') &
+        #                (round(my_vehicle['positionLat'], 3) == round(location['lat'], 3)) &
+        #                (round(my_vehicle['positionLon'], 3) == round(location['lon'], 3)) &
+        #                (my_vehicle['power'] <= 0), 'loadable'] = True
         my_vehicle.loc[(my_vehicle['state'] > 0), 'loadable'] = True
 
         appended_data.append(my_vehicle)
