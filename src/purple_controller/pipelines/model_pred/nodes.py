@@ -57,9 +57,7 @@ def construct_model_pred(timing: Dict, config: Dict, production_pv: pd.DataFrame
 
     # electric vehicles
     # my_vehicles = demand_ev.index.get_level_values("vehicle").unique()
-    # EV capacity in kWh (Nissan Leaf 2016: (40) or 62 kWh)
     E_EV_MAX = config["E_EV_CAP"]
-    #E_EV_MIN = constants["E_EV_MIN"]
     # max. EV charging power in kW (A*phases*V)
     P_EV_MAX = config["P_EV_MAX"]
     # min. EV charging power in kW (A*phases*V)
@@ -132,22 +130,6 @@ def construct_model_pred(timing: Dict, config: Dict, production_pv: pd.DataFrame
     ev_in_tot = pulp.LpVariable.dicts(
         "EVChargeTotal", Periods, lowBound=0, cat="Continuous"
     )
-    # # binary variables to couple ev_in to EV based on rules
-    # I1 = pulp.LpVariable.dicts(
-    #     "Interval1", [(v, t) for v in my_vehicles for t in Periods], cat="Binary"
-    # )
-    # I2 = pulp.LpVariable.dicts(
-    #     "Interval2", [(v, t) for v in my_vehicles for t in Periods], cat="Binary"
-    # )
-    # I3 = pulp.LpVariable.dicts(
-    #     "Interval3", [(v, t) for v in my_vehicles for t in Periods], cat="Binary"
-    # )
-    # I4 = pulp.LpVariable.dicts(
-    #     "Interval4", [(v, t) for v in my_vehicles for t in Periods], cat="Binary"
-    # )
-    # I5 = pulp.LpVariable.dicts(
-    #     "Interval5", [(v, t) for v in my_vehicles for t in Periods], cat="Binary"
-    # )
 
     EV = pulp.LpVariable.dicts(
         "EVSOC",
@@ -175,13 +157,7 @@ def construct_model_pred(timing: Dict, config: Dict, production_pv: pd.DataFrame
     # Zielfunktion
     ###############
 
-    model += pulp.lpSum([n_out[t]*t for t in Periods]) + \
-        (1/T)*pulp.lpSum(n_out)  # - pulp.lpSum(EV)
-    # + (1/T)*pulp.lpSum(n_out) - pulp.lpSum([(1/E_EV_MAX[v])*EV[(v, t)]  for v in my_vehicles for t in Periods])
-
-    #model += pulp.lpSum(n_out)
-    # model += pulp.lpSum([n_out[t]*t for t in Periods])
-    #model += pulp.lpSum([-EV[(v, T)]*(1/E_EV_MAX[v]) for v in my_vehicles])
+    model += n_out_ceil + (1/T)*pulp.lpSum(n_out)
 
     ###############
     # Constraints
@@ -252,25 +228,6 @@ def construct_model_pred(timing: Dict, config: Dict, production_pv: pd.DataFrame
             # trickle charge to 80% as soon as plugged in as default
             model += ev_in_act[(v, t)] >= .8 - EV[(v, t)]*(1/E_EV_MAX[v])
 
-            # limit charging power based on SOC
-            # model += ev_in[(v, t)] <= P_EV_MAX[v] - \
-            #     (P_EV_MAX[v]-P_EV_MIN[v])/E_EV_MAX[v]*EV[(v, t)]
-
-            # # SOS1 constraint on I1-I5 intervals
-            # model += I1[(v, t)] + I2[(v, t)] + I3[(v, t)] + I4[(v, t)] + I5[(v, t)] == 1
-
-            # # upper bounds
-            # model += EV[(v, t)] <= E_EV_MAX[v] * \
-            #     (1 - 4/5*I1[(v, t)] - 3/5*I2[(v, t)] - 2/5*I3[(v, t)] - 1/5*I4[(v, t)])
-
-            # # lower bounds
-            # model += EV[(v, t)] >= E_EV_MAX[v] * \
-            #     (0 + 1/5*I2[(v, t)] + 2/5*I3[(v, t)] + 3/5*I4[(v, t)] + 4/5*I5[(v, t)])
-
-            # # limit charging power based on EVSOC-interval
-            # model += ev_in[(v, t)] <= P_EV_MAX[v] - (P_EV_MAX[v]-P_EV_MIN[v]) * \
-            #     (1/4*I2[(v, t)]+2/4*I3[(v, t)]+3/4*I4[(v, t)]+4/4*I5[(v, t)])
-
     # initial conditions
     # model += B[0] == B[T]
     model += B[0] == production_pv.BESS_kWh[0]  # soc_inits['BESS']  # E_EL_BEG
@@ -281,9 +238,6 @@ def construct_model_pred(timing: Dict, config: Dict, production_pv: pd.DataFrame
             model += EV[(v, 0)] == demand_ev.SOC_kWh.loc[v, 0]
         else:  # total discharge unlikely, assuming 50% charge instead to retain feasibility
             model += EV[(v, 0)] == E_EV_MAX[v]*.5
-
-        # model += EV[(v, 0)] == 10  # demand_ev.SOC_kWh.loc[v, 0]
-        # model += EV[(v, 0)] <= EV[(v, T)]
 
     # calculate PV KPIs
     model += wPro == pulp.lpSum(production_pv.PV_kW)
