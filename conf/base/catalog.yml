@@ -299,6 +299,22 @@ rule_solution_plot:
   layer: reporting
 
 
+solved_pred_model:
+  type: pickle.PickleDataSet
+  filepath: data/06_models/solved_pred_model.pickle
+  layer: models
+
+pred_solution_results:
+  type: pickle.PickleDataSet
+  filepath: data/07_model_output/pred_solution.pickle
+  versioned: True
+  layer: model_output
+
+pred_solution_plot:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/pred_solution.png
+  versioned: True
+  layer: reporting
 
 
 # ev_charge_limits:
@@ -344,6 +360,19 @@ table_result1_rule:
 table_result2_rule:
   <<: *table_result
   table_name: result2_rule
+
+
+table_result0_pred:
+  <<: *table_result
+  table_name: result0_pred
+
+table_result1_pred:
+  <<: *table_result
+  table_name: result1_pred
+
+table_result2_pred:
+  <<: *table_result
+  table_name: result2_pred
 
 
 
