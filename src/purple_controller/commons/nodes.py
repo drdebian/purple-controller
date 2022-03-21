@@ -167,8 +167,9 @@ def predict_ev_data(my_ev: pd.DataFrame, timing: Dict) -> pd.DataFrame:
         'vehicle').cumcount() % int((timing['M_LA']/timing['M_DT']))
     ev_temp = ev_temp.groupby(['vehicle', 'period']).mean()
     ev_temp['driving'] = np.sign(ev_temp['driving'])
-    ev_temp['loadable'] = np.sign(ev_temp['loadable'])
-    ev_temp.loc[ev_temp['driving'] > 0, 'loadable'] = 0
+    #ev_temp['loadable'] = np.sign(ev_temp['loadable'])
+    ev_temp['loadable'] = ev_temp['loadable'] >= 0.5
+    ev_temp.loc[ev_temp['driving'] > 0, 'loadable'] = False
     print(ev_temp)
     return ev_temp
 
