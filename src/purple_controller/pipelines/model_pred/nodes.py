@@ -41,7 +41,7 @@ def construct_model_pred(timing: Dict, config: Dict, production_pv: pd.DataFrame
 
     # electric storage
     E_EL_MAX = config["E_EL_CAP"]  # max. energy level to charge to
-    assert E_EL_MAX > 0
+    assert E_EL_MAX >= 0
     # E_EL_MIN = config["E_EL_MIN"]  # min. energy level to drain to
     # max. battery (dis)charging power in kW
     P_EL_MAX = config["P_EL_MAX"]
