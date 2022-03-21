@@ -23,7 +23,7 @@ def register_pipelines() -> Dict[str, Pipeline]:
     model_pred_pipeline = mp.create_pipeline()
 
     return {
-        "__default__": model_rule_pipeline
+        "__default__": model_pred_pipeline
         + data_import_pipeline
         + data_processing_pipeline,
         "data_import": data_import_pipeline,
