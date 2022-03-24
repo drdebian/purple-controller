@@ -79,7 +79,7 @@ def load_ev_data(data_ready: Any, raw_ev_data: pd.DataFrame, config_model: Dict,
         my_vehicle.set_index(['vehicle', 'timestamp'], inplace=True)
 
         my_vehicle['driving'] = False
-        my_vehicle.loc[(my_vehicle['status'] == 'ride') | (
+        my_vehicle.loc[(my_vehicle['status'] == 'moving') | (my_vehicle['status'] == 'ride') | (
             my_vehicle['power'] > 0), 'driving'] = True
 
         my_vehicle['loadable'] = False
