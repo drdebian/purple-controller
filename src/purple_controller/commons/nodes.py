@@ -373,15 +373,38 @@ def store_model_solution_tables(result: Dict) -> Tuple:
     result2 = result['result2']
     result2.index.names = ['vehicle', 'period']
     result2.reset_index(drop=False, inplace=True)
-    #result3 = result['result3']
 
     # add timestamp for versioning
     result0['runningdate'] = my_runningtime
     result1['runningdate'] = my_runningtime
     result2['runningdate'] = my_runningtime
-    #result3['runningdate'] = my_runningtime
 
-    return result0, result1, result2  # , result3
+    return result0, result1, result2
+
+
+def store_model_solution_tables_stoch(result: Dict) -> Tuple:
+
+    my_runningtime = str(dt.datetime.now())
+
+    # store results to database
+    result0 = result['result0']
+    result1 = result['result1']
+    result1.index.names = ['period']
+    result1.reset_index(drop=False, inplace=True)
+    result2 = result['result2']
+    result2.index.names = ['period', 'scenario']
+    result2.reset_index(drop=False, inplace=True)
+    result3 = result['result3']
+    result3.index.names = ['vehicle', 'period', 'scenario']
+    result3.reset_index(drop=False, inplace=True)
+
+    # add timestamp for versioning
+    result0['runningdate'] = my_runningtime
+    result1['runningdate'] = my_runningtime
+    result2['runningdate'] = my_runningtime
+    result3['runningdate'] = my_runningtime
+
+    return result0, result1, result2, result3
 
 
 def plot_sys_timeseries_simple(result: Dict, prodpv: pd.DataFrame, demandev: pd.DataFrame) -> plt.figure:
@@ -887,15 +910,25 @@ def get_ev_charge_limits(result: Dict, params: Dict, config: Dict) -> Dict:
 
 def get_ev_charge_limits_stoch(result: Dict, params: Dict, config: Dict) -> Dict:
 
-    if params['disable_charging_limits'] == 1:
-        ev_charge_limits = pd.DataFrame()
-        ev_charge_limits['vehicle'] = config['P_EV_MAX'].keys()
-        ev_charge_limits['EVCharge'] = config['P_EV_MAX'].values()
-        ev_charge_limits.set_index('vehicle', inplace=True)
-        ev_charge_limits = ev_charge_limits.EVCharge[:].copy()
-    else:
-        result3 = result['result3']
-        ev_charge_limits = result3.EVCharge[:, 0, 0].copy()
+    # prepare maximums in case of override
+    ev_charge_limits_override = pd.DataFrame()
+    ev_charge_limits_override['vehicle'] = config['P_EV_MAX'].keys()
+    ev_charge_limits_override['EVCharge'] = config['P_EV_MAX'].values()
+    ev_charge_limits_override.set_index('vehicle', inplace=True)
+    ev_charge_limits_override = ev_charge_limits_override.EVCharge[:].copy()
 
-    print(ev_charge_limits)
+    # prepare real data in case of no override
+    ev_charge_limits_real = result['result3'].EVCharge[:, 0, 0].copy()
+
+    if params['disable_charging_limits'] == 1:
+        print("override detected!")
+        ev_charge_limits = ev_charge_limits_override
+        print("values for output:")
+        print(ev_charge_limits_override)
+        print("real values from model:")
+        print(ev_charge_limits_real)
+    else:
+        ev_charge_limits = ev_charge_limits_real
+        print(ev_charge_limits)
+
     return ev_charge_limits
