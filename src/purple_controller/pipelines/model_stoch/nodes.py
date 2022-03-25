@@ -76,6 +76,17 @@ def construct_model_stoch(timing: Dict, config: Dict, production_pv: pd.DataFram
     assert production_pv.PV_kW.min() >= 0
     assert production_pv.BESS_kWh.min() >= 0
 
+    print('max EVpower: ', demand_ev.power.max())
+    for v in my_vehicles:
+        for s in my_vehicle_scenarios:
+            assert demand_ev.SOC_kWh.loc[v, 0, s] <= E_EV_MAX[v]
+            assert demand_ev.SOC_kWh.loc[v, 0, s] >= 0
+            for t in Periods:
+                #assert demand_ev.power.loc[v, t, s] <= P_EV_MAX[v]
+                # fix outliers in EV power consumption
+                if demand_ev.power.loc[v, t, s] >= P_EV_MAX[v]*2:
+                    demand_ev.power.loc[v, t, s] = P_EV_MAX[v]*2
+
     # Model creation
     model = pulp.LpProblem("StochastikmodellLadestation", pulp.LpMinimize)
 
@@ -99,8 +110,8 @@ def construct_model_stoch(timing: Dict, config: Dict, production_pv: pd.DataFram
     n_in = pulp.LpVariable.dicts(
         "GridFeed", [(t, s) for t in Periods for s in my_vehicle_scenarios], lowBound=0, upBound=P_NE_MAX, cat="Continuous"
     )
-    n_in_act = pulp.LpVariable.dicts("GridFeedActive", [(
-        t, s) for t in Periods for s in my_vehicle_scenarios], cat="Binary")
+    n_in_act = pulp.LpVariable.dicts(
+        "GridFeedActive", [(t, s) for t in Periods for s in my_vehicle_scenarios], cat="Binary")
 
     # Battery
     b_in = pulp.LpVariable.dicts(
@@ -173,6 +184,8 @@ def construct_model_stoch(timing: Dict, config: Dict, production_pv: pd.DataFram
         .5*(1/len(my_vehicles))*(1/len(my_vehicle_scenarios)) * \
         pulp.lpSum([(1/E_EV_MAX[v])*EV[(v, T, s)]
                    for v in my_vehicles for s in my_vehicle_scenarios])
+
+    #model += n_out_ceil + (1/T)*(1/len(my_vehicle_scenarios))*pulp.lpSum(n_out)
 
     ###############
     # Constraints
