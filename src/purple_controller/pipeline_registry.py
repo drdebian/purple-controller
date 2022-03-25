@@ -8,6 +8,7 @@ from purple_controller.pipelines import data_processing as dp
 from purple_controller.pipelines import model_direct as md
 from purple_controller.pipelines import model_rule as mr
 from purple_controller.pipelines import model_pred as mp
+from purple_controller.pipelines import model_stoch as ms
 
 
 def register_pipelines() -> Dict[str, Pipeline]:
@@ -21,6 +22,7 @@ def register_pipelines() -> Dict[str, Pipeline]:
     model_direct_pipeline = md.create_pipeline()
     model_rule_pipeline = mr.create_pipeline()
     model_pred_pipeline = mp.create_pipeline()
+    model_stoch_pipeline = ms.create_pipeline()
 
     return {
         "__default__": model_pred_pipeline
@@ -34,5 +36,6 @@ def register_pipelines() -> Dict[str, Pipeline]:
         + data_processing_pipeline,
         "model_pred": model_pred_pipeline + data_import_pipeline
         + data_processing_pipeline,
-
+        "model_stoch": model_stoch_pipeline + data_import_pipeline
+        + data_processing_pipeline,
     }
