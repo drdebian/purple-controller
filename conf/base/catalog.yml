@@ -236,6 +236,14 @@ processed_ev_data:
   type: pickle.PickleDataSet
   filepath: data/03_primary/processed_ev_data.pickle
 
+history_ev_data:
+  type: pickle.PickleDataSet
+  filepath: data/03_primary/history_ev_data.pickle
+
+scenarios_ev_data:
+  type: pickle.PickleDataSet
+  filepath: data/03_primary/scenarios_ev_data.pickle
+
 
 
 ev_data:

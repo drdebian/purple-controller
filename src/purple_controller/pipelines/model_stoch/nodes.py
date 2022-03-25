@@ -115,7 +115,7 @@ def construct_model_stoch(timing: Dict, config: Dict, production_pv: pd.DataFram
         "BatteryDischargeActive", [(t, s) for t in Periods for s in my_vehicle_scenarios], cat="Binary")
 
     B = pulp.LpVariable.dicts(
-        "BatterySOC", [(t, s) for t in Instants for s in my_vehicle_scenarios], lowBound=E_EL_MIN, upBound=E_EL_MAX, cat="Continuous"
+        "BatterySOC", [(t, s) for t in Instants for s in my_vehicle_scenarios], lowBound=0, upBound=E_EL_MAX, cat="Continuous"
     )
 
     # Electric Vehicles

@@ -175,6 +175,7 @@ def predict_ev_data(my_ev: pd.DataFrame, timing: Dict) -> pd.DataFrame:
 
 
 def scenarios_ev_data(my_ev: pd.DataFrame, timing: Dict) -> pd.DataFrame:
+    # TODO: handle cases where not all cars have the same number of scenarios!
     ev_temp = my_ev.sort_index().copy()
     ev_temp.reset_index(drop=False, inplace=True)
     ev_temp['period'] = ev_temp.groupby(
