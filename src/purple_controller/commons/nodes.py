@@ -198,7 +198,7 @@ def scenarios_ev_data(my_ev: pd.DataFrame, timing: Dict) -> pd.DataFrame:
                 try:
                     my_temp = ev_temp.loc[v, t, s].copy()
                 except:
-                    print('value for ', v, t, s, ' missing!')
+                    #print('value for ', v, t, s, ' missing!')
                     ev_temp.loc[v, t, s] = ev_temp.loc[v, t, s-1]
 
     return ev_temp.sort_index()
