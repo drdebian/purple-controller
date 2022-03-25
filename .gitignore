@@ -158,3 +158,4 @@ venv.bak/
 # mypy
 .mypy_cache/
 notebooks/Untitled.ipynb
+notebooks/Untitled1.ipynb

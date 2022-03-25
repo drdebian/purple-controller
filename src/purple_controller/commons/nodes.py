@@ -144,7 +144,8 @@ def get_history_pv_data(my_pv: pd.DataFrame, my_timestamps: Dict) -> pd.DataFram
 
 
 def get_history_ev_data(my_ev: pd.DataFrame, my_timestamps: Dict) -> pd.DataFrame:
-    ev_temp = my_ev.loc[pd.IndexSlice[:, my_timestamps['past_from']                                      :my_timestamps['past_to']], :].copy()
+    ev_temp = my_ev.loc[pd.IndexSlice[:, my_timestamps['past_from']
+        :my_timestamps['past_to']], :].copy()
 
     print(ev_temp)
     return ev_temp
@@ -182,6 +183,24 @@ def scenarios_ev_data(my_ev: pd.DataFrame, timing: Dict) -> pd.DataFrame:
         'vehicle').cumcount() % int((timing['M_LA']/timing['M_DT']))
     ev_temp['scenario'] = ev_temp.groupby(['vehicle', 'period']).cumcount()
     ev_temp = ev_temp.groupby(['vehicle', 'period', 'scenario']).mean()
+
+    # impute missing scenarios with data from previous scenario
+    all_vehicles = ev_temp.index.get_level_values(
+        "vehicle").unique()
+    all_periods = ev_temp.index.get_level_values(
+        "period").unique()
+    all_vehicle_scenarios = ev_temp.index.get_level_values(
+        "scenario").unique()
+
+    for v in all_vehicles:
+        for t in all_periods:
+            for s in all_vehicle_scenarios:
+                try:
+                    my_temp = ev_temp.loc[v, t, s].copy()
+                except:
+                    print('value for ', v, t, s, ' missing!')
+                    ev_temp.loc[v, t, s] = ev_temp.loc[v, t, s-1]
+
     return ev_temp.sort_index()
 
 
