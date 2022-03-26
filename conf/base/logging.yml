@@ -51,6 +51,19 @@ handlers:
         encoding: utf8
         delay: True
 
+    # custom entry to handle data error entries
+    purple_dataerrors_handler:
+        class: logging.handlers.RotatingFileHandler
+        level: INFO
+        formatter: simple
+        filename: logs/dataerrors.log
+        maxBytes: 10485760 # 10MB
+        backupCount: 20
+        encoding: utf8
+        delay: True
+
+
+
 loggers:
     anyconfig:
         level: WARNING
@@ -76,6 +89,12 @@ loggers:
     purple.computation:
         level: INFO
         handlers: [console, purple_computations_handler]
+        propagate: no
+
+    # custom entry to log data errors
+    purple.dataerrors:
+        level: INFO
+        handlers: [console, purple_dataerrors_handler]
         propagate: no
 
 root:

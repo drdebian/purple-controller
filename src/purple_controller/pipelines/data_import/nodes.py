@@ -1,5 +1,8 @@
 import pandas as pd
 from typing import Dict, Any, Callable, Tuple
+import logging
+#log = logging.getLogger(__name__)
+dataerrors_log = logging.getLogger("purple.dataerrors")
 
 
 def concatenate_partitions(partitions: Dict[str, Callable[[], Any]], model_timestamps: Dict[str, pd.Timestamp], mtd: pd.DataFrame) -> pd.DataFrame:
@@ -30,8 +33,15 @@ def concatenate_partitions(partitions: Dict[str, Callable[[], Any]], model_times
         # if partition_datetime >= model_timestamps['past_from'] and partition_datetime <= model_timestamps['now']:
         if partition_datetime >= maxdatetime.floor('H') and partition_datetime <= model_timestamps['now']:
             partition_data = partition_load_func()
-            partition_data = partition_data.loc[partition_data.TimeDate > str(
-                maxdatetime)]
+
+            try:
+                partition_data = partition_data.loc[partition_data.TimeDate > str(
+                    maxdatetime)]
+            except:
+                # log the error, probably due to faulty header
+                dataerrors_log.warning(f"File {partition_key} could not be processed.")
+                # clear partition data to prevent adding to concatenated dataset
+                partition_data = pd.DataFrame()
 
             if len(partition_data) > 0:
                 result = pd.concat([result, partition_data],
