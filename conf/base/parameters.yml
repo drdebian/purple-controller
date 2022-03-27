@@ -42,5 +42,4 @@ constants:
   P_PV_ETA: 0.6
 
 general:
-  disable_charging_limits: 1
-  
+  disable_charging_limits: 0
