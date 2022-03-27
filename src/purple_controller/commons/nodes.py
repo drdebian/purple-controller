@@ -144,8 +144,7 @@ def get_history_pv_data(my_pv: pd.DataFrame, my_timestamps: Dict) -> pd.DataFram
 
 
 def get_history_ev_data(my_ev: pd.DataFrame, my_timestamps: Dict) -> pd.DataFrame:
-    ev_temp = my_ev.loc[pd.IndexSlice[:, my_timestamps['past_from']
-        :my_timestamps['past_to']], :].copy()
+    ev_temp = my_ev.loc[pd.IndexSlice[:, my_timestamps['past_from']                                      :my_timestamps['past_to']], :].copy()
 
     print(ev_temp)
     return ev_temp
@@ -238,9 +237,10 @@ def get_model_ev_data(my_current_ev: pd.DataFrame, my_predicted_ev: pd.DataFrame
     return ev_temp
 
 
-def get_model_ev_scenarios(current_ev: pd.DataFrame, scenarios_ev: pd.DataFrame) -> pd.DataFrame:
+def get_model_ev_scenarios(current_ev: pd.DataFrame, scenarios_ev: pd.DataFrame, config: Dict) -> pd.DataFrame:
     my_scenarios = scenarios_ev.index.get_level_values('scenario').unique()
     my_current_ev = current_ev.sort_index().copy()
+    P_EV_MAX = config["P_EV_MAX"]
 
     appended_data = list()
     for i in my_scenarios:
@@ -280,6 +280,14 @@ def get_model_ev_scenarios(current_ev: pd.DataFrame, scenarios_ev: pd.DataFrame)
     ev_temp.set_index(['vehicle', 'period', 'scenario'], inplace=True)
     ev_temp = ev_temp.sort_index()
 
+    # handle outliers in EV power causing problems for stochastic model
+    for v in ev_temp.index.get_level_values("vehicle").unique():
+        for t in ev_temp.index.get_level_values("period").unique():
+            for s in ev_temp.index.get_level_values("scenario").unique():
+                # fix outliers in EV power consumption
+                if ev_temp.power.loc[v, t, s] > P_EV_MAX[v]:
+                    ev_temp.power.loc[v, t, s] = P_EV_MAX[v]
+
     return ev_temp
 
 
@@ -297,7 +305,7 @@ def get_model_ev_scenarios(current_ev: pd.DataFrame, scenarios_ev: pd.DataFrame)
 #     return my_soc_inits
 
 
-def solve_model(model: pulp.LpProblem, solverparams: Dict) -> pulp.LpProblem:
+def solve_model(model: pulp.LpProblem, solverparams: Dict) -> Tuple:
 
     tic = time.perf_counter()
 
@@ -318,7 +326,7 @@ def solve_model(model: pulp.LpProblem, solverparams: Dict) -> pulp.LpProblem:
         log.error('Model could not be solved!!')
         # print(model)
 
-    return model
+    return model, result
 
 
 def extract_model_solution_dataframes(model: pulp.LpProblem) -> Dict:
@@ -902,7 +910,7 @@ def plot_sys_timeseries_stochastic(result: Dict, prodpv: pd.DataFrame, demandev:
     return(fig)
 
 
-def get_ev_charge_limits(result: Dict, params: Dict, config: Dict) -> Dict:
+def get_ev_charge_limits(result: Dict, params: Dict, config: Dict, solvingstate: Any) -> Dict:
 
     # prepare maximums in case of override
     ev_charge_limits_override = pd.DataFrame()
@@ -921,6 +929,13 @@ def get_ev_charge_limits(result: Dict, params: Dict, config: Dict) -> Dict:
         print(ev_charge_limits_override)
         print("real values from model:")
         print(ev_charge_limits_real)
+    elif solvingstate != 1:
+        print("unsolved model detected!")
+        ev_charge_limits = ev_charge_limits_override
+        print("values for output:")
+        print(ev_charge_limits_override)
+        print("real values from unsolved model:")
+        print(ev_charge_limits_real)
     else:
         ev_charge_limits = ev_charge_limits_real
         print(ev_charge_limits)
@@ -928,7 +943,7 @@ def get_ev_charge_limits(result: Dict, params: Dict, config: Dict) -> Dict:
     return ev_charge_limits
 
 
-def get_ev_charge_limits_stoch(result: Dict, params: Dict, config: Dict) -> Dict:
+def get_ev_charge_limits_stoch(result: Dict, params: Dict, config: Dict, solvingstate: Any) -> Dict:
 
     # prepare maximums in case of override
     ev_charge_limits_override = pd.DataFrame()
@@ -946,6 +961,13 @@ def get_ev_charge_limits_stoch(result: Dict, params: Dict, config: Dict) -> Dict
         print("values for output:")
         print(ev_charge_limits_override)
         print("real values from model:")
+        print(ev_charge_limits_real)
+    elif solvingstate != 1:
+        print("unsolved model detected!")
+        ev_charge_limits = ev_charge_limits_override
+        print("values for output:")
+        print(ev_charge_limits_override)
+        print("real values from unsolved model:")
         print(ev_charge_limits_real)
     else:
         ev_charge_limits = ev_charge_limits_real

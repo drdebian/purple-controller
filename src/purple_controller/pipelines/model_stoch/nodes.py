@@ -82,10 +82,10 @@ def construct_model_stoch(timing: Dict, config: Dict, production_pv: pd.DataFram
             assert demand_ev.SOC_kWh.loc[v, 0, s] <= E_EV_MAX[v]
             assert demand_ev.SOC_kWh.loc[v, 0, s] >= 0
             for t in Periods:
-                #assert demand_ev.power.loc[v, t, s] <= P_EV_MAX[v]
-                # fix outliers in EV power consumption
-                if demand_ev.power.loc[v, t, s] >= P_EV_MAX[v]*2:
-                    demand_ev.power.loc[v, t, s] = P_EV_MAX[v]*2
+                assert demand_ev.power.loc[v, t, s] <= P_EV_MAX[v]
+                # # fix outliers in EV power consumption
+                # if demand_ev.power.loc[v, t, s] > P_EV_MAX[v]:
+                #     demand_ev.power.loc[v, t, s] = P_EV_MAX[v]
 
     # Model creation
     model = pulp.LpProblem("StochastikmodellLadestation", pulp.LpMinimize)
