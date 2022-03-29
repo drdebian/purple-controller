@@ -8,7 +8,7 @@ timing:
 solverparams:
   gap_relative: .1
   gap_absolute: .1
-  timelimit: 600
+  timelimit: 780
 
 location:
   lat: 47.454015362053475
