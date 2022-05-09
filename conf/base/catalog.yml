@@ -93,9 +93,9 @@ raw_car5:
   <<: *raw_car
   path: data/01_raw/cars/car5
 
-raw_car6:
-  <<: *raw_car
-  path: data/01_raw/cars/car6
+# raw_car6:
+#   <<: *raw_car
+#   path: data/01_raw/cars/car6
 
 # raw_carsample1:
 #   <<: *raw_car
@@ -144,9 +144,9 @@ table_charger5:
   <<: *table_charger
   table_name: charger5
 
-table_charger6:
-  <<: *table_charger
-  table_name: charger6
+# table_charger6:
+#   <<: *table_charger
+#   table_name: charger6
 
 
 _table_car: &table_car
@@ -177,17 +177,17 @@ table_car5:
   <<: *table_car
   table_name: car5
 
-table_car6:
-  <<: *table_car
-  table_name: car6
+# table_car6:
+#   <<: *table_car
+#   table_name: car6
 
-table_carsample1:
-  <<: *table_car
-  table_name: carsample1
+# table_carsample1:
+#   <<: *table_car
+#   table_name: carsample1
 
-table_carsample2:
-  <<: *table_car
-  table_name: carsample2
+# table_carsample2:
+#   <<: *table_car
+#   table_name: carsample2
 
 
 # raw_config_lila:
@@ -343,16 +343,16 @@ stoch_solution_plot:
   layer: reporting
 
 
-# ev_charge_limits:
-#   type: pandas.JSONDataSet
-#   filepath: data/07_model_output/ev_charge_limits.json
-#   layer: model_output
-
 ev_charge_limits:
   type: pandas.JSONDataSet
-  filepath: sftp:///var/local/NodeRed/commands/car_charge_limits.json
-  credentials: my_remotessh_creds
+  filepath: data/07_model_output/ev_charge_limits.json
   layer: model_output
+
+# ev_charge_limits:
+#   type: pandas.JSONDataSet
+#   filepath: sftp:///var/local/NodeRed/commands/car_charge_limits.json
+#   credentials: my_remotessh_creds
+#   layer: model_output
 
 
 _table_result: &table_result
@@ -421,7 +421,7 @@ table_result3_stoch:
 _table_maxtimedate: &table_maxtimedate
   type: pandas.SQLQueryDataSet
   credentials: my_sqlite_creds
-  layer: intermediate
+  #layer: intermediate
 
 table_maxtimedate_car1:
   <<: *table_maxtimedate
